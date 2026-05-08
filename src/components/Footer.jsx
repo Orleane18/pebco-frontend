@@ -49,7 +49,7 @@ function Footer() {
 
           {/* Coordonnées (icônes conservées) */}
           <div>
-            <h3 className="text-blue-500 font-semibold mb-3">Contact</h3>
+            <h3 className="text--500 font-semibold mb-3">Contact</h3>
             <ul className="space-y-2 text-sm">
               <li className="flex items-center gap-2"><PhoneIcon className="w-4 h-4" /> +229 97 00 00 00</li>
               <li className="flex items-center gap-2"><EnvelopeIcon className="w-4 h-4" /> contact@pebcofinance.bj</li>

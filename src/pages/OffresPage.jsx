@@ -47,30 +47,30 @@ const offres = [
 ];
 
 function OffresPage() {
-  const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  const handleDemande = (offre) => {
-    navigate('/demande', { state: { offre } });
-  };
+  const handleDemande = (offre) => {
+    navigate('/demande', { state: { offre } });
+  };
 
-  const handleSimulateur = (offre) => {
-    const montantStr = offre.montant;
-    const parts = montantStr.split('à');
-    const montantMin = parseInt(parts[0].replace(/\D/g, ''), 10);
-    const montantMax = parseInt(parts[1].replace(/\D/g, ''), 10);
-    const tauxAnnuel = parseFloat(offre.taux.replace('% TAEG', '').trim());
-    const dureeParts = offre.duree.split('à');
-    const dureeMax = parseInt(dureeParts[1].replace('mois', '').trim(), 10);
+  const handleSimulateur = (offre) => {
+    const montantStr = offre.montant;
+    const parts = montantStr.split('à');
+    const montantMin = parseInt(parts[0].replace(/\D/g, ''), 10);
+    const montantMax = parseInt(parts[1].replace(/\D/g, ''), 10);
+    const tauxAnnuel = parseFloat(offre.taux.replace('% TAEG', '').trim());
+    const dureeParts = offre.duree.split('à');
+    const dureeMax = parseInt(dureeParts[1].replace('mois', '').trim(), 10);
 
-    navigate('/amortissement', {
-      state: {
-        offre: offre.titre,
-        taux: tauxAnnuel,
-        dureeMax: dureeMax,
-        montantMin: montantMin,
-        montantMax: montantMax,
-      }
-    });
+    navigate('/amortissement', {
+      state: {
+        offre: offre.titre,
+        taux: tauxAnnuel,
+        dureeMax: dureeMax,
+        montantMin: montantMin,
+        montantMax: montantMax,
+      }
+    });
   };
 
   return (
@@ -103,10 +103,10 @@ function OffresPage() {
         </div>
       </section>
 
-      {/* GRILLE D'OFFRES */}
-      <section className="relative py-24 -mt-10">
+      {/* GRILLE D'OFFRES - CARTES SÉPARÉES */}
+      <section className="relative py-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px border border-slate-200 rounded-[2rem] overflow-hidden">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {offres.map((offre, idx) => (
               <motion.div
                 key={idx}
@@ -114,10 +114,10 @@ function OffresPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
-                className="group relative bg-white p-8 flex flex-col h-full hover:bg-slate-50 transition-colors duration-500"
+                className="group flex flex-col h-full bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
               >
                 {/* Image Section */}
-                <div className="relative h-44 mb-8 overflow-hidden rounded-xl">
+                <div className="relative h-44 overflow-hidden rounded-t-2xl">
                   <img
                     src={offre.image}
                     alt={offre.titre}
@@ -126,7 +126,7 @@ function OffresPage() {
                 </div>
 
                 {/* Content */}
-                <div className="flex flex-col flex-grow">
+                <div className="flex flex-col flex-grow p-6">
                   <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-2">
                     {offre.category}
                   </span>
@@ -136,7 +136,7 @@ function OffresPage() {
                   </p>
 
                   {/* Specs Grid */}
-                  <div className="space-y-3 mb-8 border-t border-slate-100 pt-6">
+                  <div className="space-y-3 mb-6 border-t border-slate-100 pt-5">
                     <div className="flex items-center gap-3 text-xs">
                       <ChartBarIcon className="w-4 h-4 text-blue-600" />
                       <span className="text-slate-400">Taux :</span>
@@ -157,16 +157,16 @@ function OffresPage() {
                   </div>
 
                   {/* Actions */}
-                 <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-3 mt-auto">
                     <button
                       onClick={() => handleDemande(offre)}
-                      className="w-full bg-slate-900 text-white py-3 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all duration-300 shadow-lg shadow-slate-200"
+                      className="w-full bg-slate-900 text-white py-3 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all duration-300 shadow-md shadow-slate-200 hover:bg-blue-700 hover:shadow-blue-100"
                     >
                       Initier une demande
                     </button>
                     <button
                       onClick={() => handleSimulateur(offre)}
-                      className="w-full border border-slate-200 text-slate-600 py-3 rounded-lg text-[11px] font-bold uppercase tracking-widest hover:bg-slate-100 transition-all duration-300"
+                      className="w-full border border-slate-300 text-slate-600 py-3 rounded-lg text-[11px] font-bold uppercase tracking-widest hover:bg-slate-50 hover:border-slate-400 transition-all duration-300"
                     >
                       Calculer l'échéancier
                     </button>
@@ -179,7 +179,7 @@ function OffresPage() {
           <motion.p 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            className="mt-12 text-center text-slate-400 text-xs font-light italic"
+            className="mt-16 text-center text-slate-400 text-xs font-light italic"
           >
             * Offres soumises à conditions de l'organisme prêteur. TAEG fixe sur toute la durée du contrat.
           </motion.p>

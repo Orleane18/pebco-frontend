@@ -13,7 +13,6 @@ const credits = [
     color: 'text-blue-700',
     bgIcon: 'bg-blue-50',
     image: '/images/photo26.jpg',
-    detailPath: '/credit/individuel'
   },
   {
     id: 'mutuel',
@@ -24,7 +23,6 @@ const credits = [
     color: 'text-slate-700',
     bgIcon: 'bg-slate-100',
     image: '/images/photo25.jpg',
-    detailPath: '/credit/mutuel'
   },
   {
     id: 'immobilier',
@@ -35,106 +33,99 @@ const credits = [
     color: 'text-indigo-700',
     bgIcon: 'bg-indigo-50',
     image: '/images/photo22.jpg',
-    detailPath: '/credit/immobilier'
   },
-  {
-    id: 'agricole',
-    title: 'Crédit Agricole',
-    category: 'Développement RURAL',
-    description: 'Dispositifs spécifiques dédiés à l’optimisation et à la croissance des exploitations agricoles.',
-    icon: ShieldCheckIcon,
-    color: 'text-emerald-700',
-    bgIcon: 'bg-emerald-50',
-    image: '/images/photo24.jpg',
-    detailPath: '/credit/agricole'
-  }
 ];
 
 function CreditTypes() {
   const navigate = useNavigate();
 
   return (
-    <section className="relative py-28 bg-slate-50 overflow-hidden">
-      {/* --- ÉLÉMENTS DE DESIGN EN ARRIÈRE-PLAN --- */}
+    <section className="relative py-20 bg-[#fcfcfd] overflow-hidden">
+      {/* --- BACKGROUND ELEMENTS --- */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-        <div className="absolute inset-0 opacity-[0.02]" 
-             style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 0px)', backgroundSize: '40px 40px' }} />
+        <div 
+          className="absolute inset-0 opacity-[0.03]" 
+          style={{ backgroundImage: 'radial-gradient(#475569 1px, transparent 0px)', backgroundSize: '32px 32px' }} 
+        />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         
-        {/* EN-TÊTE SECTION */}
-        <div className="max-w-3xl mb-20">
-          <motion.span 
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="text-blue-600 font-bold tracking-[0.2em] uppercase text-xs mb-4 block"
-          >
-            Nos expertises
-          </motion.span>
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
+        {/* SECTION HEADER */}
+        <div className="max-w-3xl mb-24">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-light text-slate-900 leading-tight mb-6"
+            transition={{ duration: 0.6 }}
           >
-            Des solutions de crédit <br />
-            <span className="font-semibold text-blue-600">adaptées à vos défis.</span>
-          </motion.h2>
-          <div className="w-20 h-1 bg-blue-600 rounded-full" />
+            <span className="inline-block px-3 py-1 mb-6 text-[8px] font-bold tracking-[0.25em] uppercase text-blue-600 bg-blue-50 border border-blue-100 rounded-full">
+              Expertises Bancaires
+            </span>
+            <h2 className="text-4xl md:text-5xl font-extralight text-slate-900 leading-[1.1] mb-8">
+              Des solutions de crédit <br />
+              <span className="font-semibold text-blue-600">sur-mesure pour vous.</span>
+            </h2>
+            <div className="w-24 h-1.5 bg-blue-600 rounded-full" />
+          </motion.div>
         </div>
 
-        {/* GRILLE DE CARTES */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-slate-100 border border-slate-100 rounded-3xl overflow-hidden">
+        {/* CARDS GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {credits.map((credit, i) => (
             <motion.div 
               key={credit.id}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="group relative bg-white p-8 flex flex-col h-full transition-colors duration-500 hover:bg-slate-50/50"
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              onClick={() => navigate(`/credit/${credit.id}`, { state: { creditId: credit.id } })}
+              className="group cursor-pointer relative bg-white border border-slate-100 rounded-3xl p-6 flex flex-col h-full transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] hover:-translate-y-2"
             >
-              {/* Image avec Overlay */}
-              <div className="relative h-48 mb-8 overflow-hidden rounded-xl">
+              {/* Image Container */}
+              <div className="relative h-52 mb-8 overflow-hidden rounded-2xl shadow-inner">
                 <img 
                   src={credit.image} 
                   alt={credit.title}
-                  className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent opacity-60 group-hover:opacity-20 transition-opacity duration-500" />
+                
+                {/* Badge Category sur l'image */}
+                <div className="absolute top-4 left-4">
+                   <span className="px-3 py-1 bg-white/90 backdrop-blur-md text-[9px] font-black uppercase tracking-tighter text-slate-800 rounded-lg shadow-sm">
+                    {credit.category}
+                  </span>
+                </div>
               </div>
 
-              {/* Contenu Texte */}
-              <div className="flex flex-col flex-grow">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">
-                  {credit.category}
-                </span>
-                
-                <div className="flex items-center gap-3 mb-4">
-                  <div className={`p-2 rounded-lg ${credit.bgIcon} ${credit.color}`}>
-                    <credit.icon className="w-5 h-5" />
+              {/* Content */}
+              <div className="flex flex-col flex-grow px-2">
+                <div className="flex items-center gap-4 mb-5">
+                  <div className={`flex-shrink-0 p-2.5 rounded-xl ${credit.bgIcon} ${credit.color} ring-1 ring-inset ring-black/5`}>
+                    <credit.icon className="w-6 h-6" />
                   </div>
-                  <h3 className="text-xl font-semibold text-slate-900 tracking-tight">
+                  <h3 className="text-xl font-bold text-slate-900 leading-none">
                     {credit.title}
                   </h3>
                 </div>
 
-                <p className="text-slate-500 text-sm leading-relaxed font-light mb-8 flex-grow">
+                <p className="text-slate-500 text-[14px] leading-relaxed font-normal mb-8 flex-grow">
                   {credit.description}
                 </p>
 
-                {/* Bouton Premium */}
-                <button 
-                  onClick={() => navigate(`/credit/${credit.id}`, { state: { creditId: credit.id } })}
-                  className="group/btn relative inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-900 overflow-hidden"
-                >
-                  <span className="relative z-10">Consulter l'offre</span>
-                  <span className="text-blue-600 transform group-hover/btn:translate-x-1 transition-transform">→</span>
-                  <div className="absolute bottom-0 left-0 w-0 h-px bg-blue-600 group-hover/btn:w-full transition-all duration-300" />
-                </button>
+                {/* Footer Action */}
+                <div className="flex items-center justify-between pt-6 border-t border-slate-50">
+                  <span className="text-[11px] font-bold uppercase tracking-widest text-slate-400 group-hover:text-blue-600 transition-colors">
+                    Explorer l'offre
+                  </span>
+                  <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </div>
+                </div>
               </div>
             </motion.div>
           ))}

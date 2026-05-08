@@ -84,7 +84,7 @@ function AboutSection() {
 
         .about-section {
           min-height: 100vh;
-          background: linear-gradient(135deg, #0a1628 0%, #0d2347 60%, #0a1f3d 100%);
+          background: linear-gradient(135deg, #2a4468 0%, #25477e 60%, #15488f 100%);
           display: flex;
           align-items: center;
           padding: 5rem 2rem;
@@ -97,8 +97,8 @@ function AboutSection() {
           position: absolute;
           inset: 0;
           background-image:
-            linear-gradient(rgba(183,148,72,0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(183,148,72,0.04) 1px, transparent 1px);
+            linear-gradient(rgba(245,176,66,0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(245,176,66,0.04) 1px, transparent 1px);
           background-size: 60px 60px;
         }
 
@@ -106,7 +106,7 @@ function AboutSection() {
           position: absolute;
           width: 500px; height: 500px;
           border-radius: 50%;
-          background: radial-gradient(circle, rgba(183,148,72,0.06) 0%, transparent 70%);
+          background: radial-gradient(circle, rgba(245,176,66,0.06) 0%, transparent 70%);
           top: -100px; right: -100px;
           pointer-events: none;
         }
@@ -157,7 +157,7 @@ function AboutSection() {
 
         .about-eyebrow-line {
           width: 32px; height: 1px;
-          background: #b79448;
+          background: #F5B042;
         }
 
         .about-eyebrow span {
@@ -165,7 +165,7 @@ function AboutSection() {
           font-weight: 500;
           letter-spacing: 0.2em;
           text-transform: uppercase;
-          color: #b79448;
+          color: #F5B042;
         }
 
         .about-heading {
@@ -181,7 +181,7 @@ function AboutSection() {
         }
 
         .about-dynamic-text {
-          background: linear-gradient(90deg, #b79448, #e8c96a);
+          background: linear-gradient(90deg, #F5B042, #FFD966);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
@@ -191,7 +191,7 @@ function AboutSection() {
           display: inline-block;
           width: 3px;
           height: 2.2rem;
-          background: #e8c96a;
+          background: #FFD966;
           margin-left: 3px;
           vertical-align: middle;
           animation: aboutBlink 1s step-end infinite;
@@ -212,7 +212,7 @@ function AboutSection() {
         }
 
         .about-body-text strong {
-          color: #e8c96a;
+          color: #FFD966;
           font-weight: 500;
         }
 
@@ -220,7 +220,7 @@ function AboutSection() {
           display: flex;
           gap: 2rem;
           padding-top: 1rem;
-          border-top: 1px solid rgba(183,148,72,0.2);
+          border-top: 1px solid rgba(245,176,66,0.2);
           flex-wrap: wrap;
         }
 
@@ -233,7 +233,7 @@ function AboutSection() {
         .about-stat-number {
           font-family: 'Playfair Display', serif;
           font-size: 1.8rem;
-          color: #e8c96a;
+          color: #FFD966;
           line-height: 1;
         }
 
@@ -256,7 +256,7 @@ function AboutSection() {
           align-items: center;
           gap: 10px;
           padding: 0.75rem 1.75rem;
-          background: linear-gradient(135deg, #b79448, #e8c96a);
+          background: linear-gradient(135deg, #F5B042, #FFD966);
           color: #0a1628;
           font-family: 'DM Sans', sans-serif;
           font-size: 0.875rem;
@@ -280,7 +280,7 @@ function AboutSection() {
           cursor: pointer;
           text-decoration: none;
           letter-spacing: 0.03em;
-          border-bottom: 1px solid rgba(183,148,72,0.4);
+          border-bottom: 1px solid rgba(245,176,66,0.4);
           padding-bottom: 1px;
           transition: color 0.2s;
           background: none;
@@ -290,7 +290,7 @@ function AboutSection() {
           font-family: 'DM Sans', sans-serif;
         }
 
-        .about-cta-link:hover { color: #e8c96a; }
+        .about-cta-link:hover { color: #FFD966; }
 
         .about-image-side {
           position: relative;
@@ -308,7 +308,7 @@ function AboutSection() {
           position: absolute;
           top: -16px; left: -16px;
           width: 100%; height: 100%;
-          border: 1px solid rgba(183,148,72,0.35);
+          border: 2px solid rgba(245,176,66,0.35);
           border-radius: 2px;
           z-index: 0;
         }
@@ -319,7 +319,7 @@ function AboutSection() {
           right: -30px;
           width: 80px;
           height: 80px;
-          background-image: radial-gradient(rgba(183,148,72,0.3) 1.5px, transparent 1.5px);
+          background-image: radial-gradient(rgba(245,176,66,0.3) 1.5px, transparent 1.5px);
           background-size: 12px 12px;
           z-index: 0;
         }
@@ -339,7 +339,7 @@ function AboutSection() {
           position: absolute;
           inset: 0;
           background:
-            radial-gradient(circle at 30% 70%, rgba(183,148,72,0.08) 0%, transparent 50%),
+            radial-gradient(circle at 30% 70%, rgba(245,176,66,0.08) 0%, transparent 50%),
             radial-gradient(circle at 80% 20%, rgba(24,95,165,0.2) 0%, transparent 50%);
           z-index: 1;
         }
@@ -359,7 +359,7 @@ function AboutSection() {
           bottom: -20px;
           left: -40px;
           background: #0a1628;
-          border: 1px solid rgba(183,148,72,0.3);
+          border: 1px solid rgba(245,176,66,0.3);
           border-radius: 2px;
           padding: 1rem 1.25rem;
           z-index: 10;
@@ -371,7 +371,7 @@ function AboutSection() {
 
         .about-badge-icon {
           width: 40px; height: 40px;
-          background: rgba(183,148,72,0.12);
+          background: rgba(245,176,66,0.12);
           border-radius: 2px;
           display: flex;
           align-items: center;
@@ -389,7 +389,7 @@ function AboutSection() {
 
         .about-badge-desc {
           font-size: 11px;
-          color: rgba(183,148,72,0.7);
+          color: rgba(245,176,66,0.7);
           text-transform: uppercase;
           letter-spacing: 0.1em;
           display: block;
@@ -427,7 +427,7 @@ function AboutSection() {
 
             <div className="about-stats">
               <div className="about-stat">
-                <span className="about-stat-number">+2 000</span>
+                <span className="about-stat-number">+13 555</span>
                 <span className="about-stat-label">Clients financés</span>
               </div>
               <div className="about-stat">
@@ -441,7 +441,7 @@ function AboutSection() {
             </div>
 
             <div className="about-cta-row">
-              <a href="#offers" className="about-cta-btn">
+              <a href="offres" className="about-cta-btn">
                 Découvrir nos offres
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -466,7 +466,7 @@ function AboutSection() {
               <div className="about-badge-card">
                 <div className="about-badge-icon">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="#e8c96a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    stroke="#FFD966" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                     <polyline points="9 12 11 14 15 10" />
                   </svg>

@@ -1,136 +1,162 @@
-// src/components/Actualites.jsx
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CalendarIcon, ArrowRightIcon, EyeIcon } from '@heroicons/react/24/outline';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowRightIcon, ArrowLeftIcon, EyeIcon } from '@heroicons/react/24/outline';
 
-const articlesAccueil = [
-  // identique à ton code
+const articles = [
   {
     id: 1,
-    title: "Femmes et microfinance : alliance puissante",
-    excerpt: "La microfinance a joué un rôle essentiel dans l'autonomisation économique des femmes en Afrique.",
-    date: "26 Jan 2025",
-    category: "Actualités",
-    image: "/images/photo35.jpg"
+    title: "FEMMES ET MICROFINANCE : ALLIANCE PUISSANTE",
+    author: "PEBCO FINANCE",
+    excerpt: "« La microfinance a joué un rôle essentiel dans l'autonomisation économique des femmes en Afrique, offrant des opportunités de co-construction pour l'avenir. »",
+    image: "/images/photo35.jpg",
   },
   {
     id: 2,
-    title: "Impacts de P.E.B.Co-BETHESDA : Témoignages",
-    excerpt: "Découvrez les parcours inspirants de nos meilleures clientes distinguées cette année.",
-    date: "27 Oct 2025",
-    category: "Témoignages",
-    image: "/images/photo39.png"
+    title: "IMPACTS DE P.E.B.CO-BETHESDA : TÉMOIGNAGES",
+    author: "DISTINCTION 2025",
+    excerpt: "« Découvrez les parcours inspirants de nos meilleures clientes distinguées cette année, actrices majeures du développement local. »",
+    image: "/images/photo39.png",
   },
   {
     id: 3,
-    title: "Discours mémorable sur l'égalité",
-    excerpt: "Retour sur l'intervention marquante du point focal égalité homme-femme à Cotonou.",
-    date: "21 Oct 2025",
-    category: "Événement",
-    image: "/images/photo40.png"
+    title: "DISCOURS MÉMORABLE SUR L'ÉGALITÉ",
+    author: "ÉVÉNEMENT COTONOU",
+    excerpt: "« Retour sur l'intervention marquante du point focal égalité homme-femme, une nouvelle page pour notre avenir commun. »",
+    image: "/images/photo40.png",
   }
 ];
 
 function Actualites() {
   const navigate = useNavigate();
+  const [current, setCurrent] = useState(0);
+  const [dir, setDir] = useState(1);
+  const [isPaused, setIsPaused] = useState(false);
 
-  const handleReadMore = (article) => {
-    navigate('/actualite/article/' + article.id, { state: { article } });
-  };
+  const goTo = useCallback((idx, direction) => {
+    setDir(direction);
+    setCurrent((idx + articles.length) % articles.length);
+  }, []);
 
-  const handleSeeAll = () => {
-    navigate('/actualites'); // à adapter selon ta route
-  };
+  useEffect(() => {
+    if (!isPaused) {
+      const interval = setInterval(() => {
+        goTo(current + 1, 1);
+      }, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [current, isPaused, goTo]);
+
+  const article = articles[current];
 
   return (
-    <section className="py-20 bg-gradient-to-b from-slate-50 to-white">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        
-        {/* En-tête amélioré */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
-          <div className="max-w-xl">
-            <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold mb-3">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-              </span>
-              Restez informés
-            </div>
-            <h2 className="text-4xl md:text-5xl font-light text-slate-900 leading-tight">
-              Dernières <span className="text-blue-600 relative">Actualités
-                <svg className="absolute -bottom-1 left-0 w-full h-1.5 text-blue-200" viewBox="0 0 200 8" fill="currentColor">
-                  <path d="M0,4 L200,4" stroke="currentColor" strokeWidth="2" strokeDasharray="3 3" />
-                </svg>
-              </span>
+    <section className="relative py-12 bg-white overflow-hidden font-sans">
+      {/* Forme géométrique jaune en arrière-plan (zigzags à taille normale) */}
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+        <svg 
+          viewBox="0 0 1440 800" 
+          fill="none" 
+          xmlns="http://www.w3.org/2000/svg" 
+          className="w-full h-full object-cover opacity-100"
+        >
+          <path 
+            d="M-100 650H150V480H350V310H750V140H1100V-50" 
+            stroke="#E9C440" 
+            strokeWidth="80"
+            strokeLinejoin="miter" 
+            strokeMiterlimit="60"
+            className="opacity-40 md:opacity-100"
+          />
+          <path 
+            d="M200 850H450V680H650V510H1050V340H1400V150" 
+            stroke="#E9C440" 
+            strokeWidth="60" 
+            className="opacity-10 md:opacity-100"
+          />
+        </svg>
+      </div>
+
+      <div className="relative z-10 max-w-5xl mx-auto px-4">
+        {/* En-tête : alignement en haut pour que le bouton reste au-dessus de l'image */}
+        <div className="flex flex-col md:flex-row md:items-start justify-between mb-6 gap-2">
+          <div>
+            <h2 className="text-2xl md:text-3xl font-light text-[#1a1a1a] leading-tight">
+              Dernières <br />
+              <span className="font-serif italic text-[#E9C440] font-semibold">Actualités</span>
             </h2>
-            <p className="text-gray-500 mt-3 text-sm md:text-base">
-              Suivez l'impact de P.E.B.Co-BETHESDA au quotidien.
-            </p>
+            <div className="w-10 h-0.5 bg-[#E9C440] mt-2" />
           </div>
+          
           <button 
-            onClick={handleSeeAll}
-            className="group inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200 rounded-full shadow-sm text-sm font-semibold text-gray-700 hover:border-blue-300 hover:shadow-md hover:text-blue-600 transition-all duration-200"
+            onClick={() => navigate('/actualite')}
+            className="group flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-[#1a1a1a]/10 hover:bg-white/5 hover:text-black transition-all duration-300"
           >
-            <EyeIcon className="w-4 h-4" />
-            Voir toutes les actualités
-            <ArrowRightIcon className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+            <span className="text-[10px] font-bold tracking-widest uppercase">Voir toutes les actualités</span>
+            <div className="w-6 h-6 rounded-full bg-[#E9C440] flex items-center justify-center text-black group-hover:bg-white transition-colors">
+              <EyeIcon className="w-3 h-3" />
+            </div>
           </button>
         </div>
 
-        {/* Grille de cartes avec animations et meilleurs effets */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
-          {articlesAccueil.map((article, index) => (
-            <motion.div 
-              key={article.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-30px" }}
-              transition={{ delay: index * 0.1, duration: 0.5, ease: "easeOut" }}
-              whileHover={{ y: -5 }}
-              className="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:border-blue-200 hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300"
-            >
-              {/* Image avec overlay gradient au hover */}
-              <div className="relative h-44 overflow-hidden bg-gray-100">
-                <img 
-                  src={article.image} 
-                  alt={article.title} 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  onError={(e) => { e.target.src = '/images/fallback.jpg'; }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="absolute top-3 left-3">
-                  <span className="bg-white/40 backdrop-blur-sm text-blue-700 text-[11px] font-bold px-3 py-1.5 rounded-full shadow-sm uppercase tracking-wider border border-white/30">
-                    {article.category}
-                  </span>
-                </div>
-              </div>
-
-              {/* Contenu */}
-              <div className="p-5">
-                <div className="flex items-center text-xs text-gray-400 mb-3 font-medium">
-                  <CalendarIcon className="w-3.5 h-3.5 mr-1.5 text-blue-400" />
-                  {article.date}
-                </div>
-                
-                <h3 className="text-lg font-bold text-gray-700 mb-2 leading-tight transition-colors duration-200 line-clamp-2">
+        <div 
+          className="relative flex flex-col md:flex-row items-center"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          {/* Carte de contenu noire */}
+          <div className="w-full md:w-[85%] bg-[#1a1a1a] p-5 md:p-8 text-white relative z-20 shadow-2xl">
+            <AnimatePresence mode="wait" custom={dir}>
+              <motion.div
+                key={article.id}
+                initial={{ opacity: 0, x: dir * 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: dir * -50 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+              >
+                <h3 className="text-base md:text-lg font-bold tracking-wide mb-1 uppercase pr-10">
                   {article.title}
                 </h3>
-                
-                <p className="text-gray-500 text-sm leading-relaxed mb-5 line-clamp-2">
+                <p className="text-[#E9C440] text-xs italic mb-3 font-light">
+                  {article.author}
+                </p>
+                <p className="text-sm md:text-base font-light leading-relaxed mb-5 text-gray-200 md:max-w-[70%]">
                   {article.excerpt}
                 </p>
+              </motion.div>
+            </AnimatePresence>
 
-                {/* Bouton Lire l'article - version moderne */}
-                <button 
-                  onClick={() => handleReadMore(article)}
-                  className="w-full py-2.5 rounded-xl bg-gray-50/80 group-hover:bg-white-600 group-hover:text-gray text-gray-700 text-sm font-bold transition-all duration-200 flex items-center justify-center gap-2 border border-gray-100 group-hover:border-blue-500"
-                >
-                  <span>Lire l'article</span>
-                  <ArrowRightIcon className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
-                </button>
-              </div>
-            </motion.div>
-          ))}
+            {/* Navigation */}
+            <div className="flex gap-2 relative z-40">
+              <button 
+                onClick={() => goTo(current - 1, -1)}
+                className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-white hover:bg-[#E9C440] hover:text-black transition-all border border-white/20"
+              >
+                <ArrowLeftIcon className="w-3.5 h-3.5" />
+              </button>
+              <button 
+                onClick={() => goTo(current + 1, 1)}
+                className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-white hover:bg-[#E9C440] hover:text-black transition-all border border-white/20"
+              >
+                <ArrowRightIcon className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+
+          {/* Image circulaire flottante (taille inchangée) */}
+          <div className="relative z-30 mt-[-30px] md:mt-0 md:absolute md:right-[-15px] md:top-1/2 md:translate-y-[-50%]">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={article.id + "-img"}
+                initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                exit={{ opacity: 0, scale: 0.8, rotate: 5 }}
+                transition={{ duration: 0.5 }}
+                className="w-56 h-56 md:w-72 md:h-72 rounded-full border-[4px] border-white shadow-2xl overflow-hidden"
+              >
+                <img src={article.image} alt="" className="w-full h-full object-cover" />
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </div>
       </div>
     </section>

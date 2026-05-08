@@ -1,6 +1,6 @@
 // src/components/CreditTypes.jsx
 import { useNavigate } from 'react-router-dom';
-import { UserGroupIcon, HandRaisedIcon, HomeIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
+import { UserGroupIcon, HandRaisedIcon, HomeIcon, ShieldCheckIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import { motion } from 'framer-motion';
 
 const credits = [
@@ -13,6 +13,7 @@ const credits = [
     color: 'text-blue-700',
     bgIcon: 'bg-blue-50',
     image: '/images/photo26.jpg',
+    detailPath: '/credit/individuel'
   },
   {
     id: 'mutuel',
@@ -23,6 +24,7 @@ const credits = [
     color: 'text-slate-700',
     bgIcon: 'bg-slate-100',
     image: '/images/photo25.jpg',
+    detailPath: '/credit/mutuel'
   },
   {
     id: 'immobilier',
@@ -33,6 +35,7 @@ const credits = [
     color: 'text-indigo-700',
     bgIcon: 'bg-indigo-50',
     image: '/images/photo22.jpg',
+    detailPath: '/credit/immobilier'
   },
 ];
 
@@ -40,7 +43,7 @@ function CreditTypes() {
   const navigate = useNavigate();
 
   return (
-    <section className="relative py-20 bg-[#fcfcfd] overflow-hidden">
+    <section className="relative py-12 bg-[#fcfcfd] overflow-hidden">
       {/* --- BACKGROUND ELEMENTS --- */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
@@ -50,24 +53,41 @@ function CreditTypes() {
         />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+      <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8">
         
-        {/* SECTION HEADER */}
-        <div className="max-w-3xl mb-24">
+        {/* SECTION HEADER + CTA */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
+            className="max-w-2xl"
           >
-            <span className="inline-block px-3 py-1 mb-6 text-[8px] font-bold tracking-[0.25em] uppercase text-blue-600 bg-blue-50 border border-blue-100 rounded-full">
-              Expertises Bancaires
-            </span>
-            <h2 className="text-4xl md:text-5xl font-extralight text-slate-900 leading-[1.1] mb-8">
-              Des solutions de crédit <br />
-              <span className="font-semibold text-blue-600">sur-mesure pour vous.</span>
+            <h2 className="text-4xl md:text-4xl font-extralight text-slate-900 leading-[1.1] mb-8">
+              <span className="font-semibold text-blue-900">Nos crédits</span>
             </h2>
-            <div className="w-24 h-1.5 bg-blue-600 rounded-full" />
+            <div className="w-24 h-1.5 bg-blue-900 rounded-full" />
+          </motion.div>
+
+          {/* Bouton Voir toutes les offres */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <button 
+              onClick={() => navigate('/offres')}
+              className="group flex items-center gap-3 px-4 py-2 bg-white border border-slate-300 rounded-1xl transition-all duration-300"
+            >
+              <span className="text-xs font-bold uppercase tracking-widest text-slate-700 transition-colors">
+                Voir toutes les offres
+              </span>
+              <div className="p-1.5 rounded-lg bg-slate-50 text-slate-400 group-hover:bg-slate-600 group-hover:text-white transition-all duration-300">
+                <ArrowRightIcon className="w-4 h-4" />
+              </div>
+            </button>
           </motion.div>
         </div>
 
@@ -81,20 +101,18 @@ function CreditTypes() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
               onClick={() => navigate(`/credit/${credit.id}`, { state: { creditId: credit.id } })}
-              className="group cursor-pointer relative bg-white border border-slate-100 rounded-3xl p-6 flex flex-col h-full transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] hover:-translate-y-2"
+              className="cursor-pointer relative bg-gray-100 border border-slate-100 rounded-3xl p-6 flex flex-col h-full transition-all duration-500 hover:-translate-y-2"
             >
               {/* Image Container */}
-              <div className="relative h-52 mb-8 overflow-hidden rounded-2xl shadow-inner">
+              <div className="relative h-44 mb-8 overflow-hidden rounded-2xl shadow-inner">
                 <img 
                   src={credit.image} 
                   alt={credit.title}
                   className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent opacity-60 group-hover:opacity-20 transition-opacity duration-500" />
-                
-                {/* Badge Category sur l'image */}
                 <div className="absolute top-4 left-4">
-                   <span className="px-3 py-1 bg-white/90 backdrop-blur-md text-[9px] font-black uppercase tracking-tighter text-slate-800 rounded-lg shadow-sm">
+                  <span className="px-3 py-1 bg-white/90 backdrop-blur-md text-[9px] font-black uppercase tracking-tighter text-slate-800 rounded-lg shadow-sm">
                     {credit.category}
                   </span>
                 </div>
@@ -116,14 +134,12 @@ function CreditTypes() {
                 </p>
 
                 {/* Footer Action */}
-                <div className="flex items-center justify-between pt-6 border-t border-slate-50">
-                  <span className="text-[11px] font-bold uppercase tracking-widest text-slate-400 group-hover:text-blue-600 transition-colors">
+                <div className="flex items-center justify-between pt-6 border-t border-black/30">
+                  <span className="text-[11px] font-bold uppercase tracking-widest text-slate-800 group-hover:text-slate-600 transition-colors">
                     Explorer l'offre
                   </span>
-                  <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
+                  <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-600 group-hover:bg-slate-600 group-hover:text-white transition-all duration-300">
+                    <ArrowRightIcon className="w-4 h-4" />
                   </div>
                 </div>
               </div>

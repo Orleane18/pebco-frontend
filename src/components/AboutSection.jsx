@@ -84,7 +84,7 @@ function AboutSection() {
 
         .about-section {
           min-height: 100vh;
-          background: linear-gradient(135deg, #2a4468 0%, #25477e 60%, #15488f 100%);
+          background: linear-gradient(135deg, #2a4468 0%, #25477e 60%, #2d6ac0 100%);
           display: flex;
           align-items: center;
           padding: 5rem 2rem;

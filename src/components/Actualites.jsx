@@ -1,3 +1,4 @@
+// src/components/Actualites.jsx
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -6,26 +7,291 @@ import { ArrowRightIcon, ArrowLeftIcon, EyeIcon } from '@heroicons/react/24/outl
 const articles = [
   {
     id: 1,
-    title: "FEMMES ET MICROFINANCE : ALLIANCE PUISSANTE",
-    author: "PEBCO FINANCE",
-    excerpt: "« La microfinance a joué un rôle essentiel dans l'autonomisation économique des femmes en Afrique, offrant des opportunités de co-construction pour l'avenir. »",
+    title: "Femmes et microfinance : alliance puissante",
+    author: "PEBCO Finance",
+    excerpt: "La microfinance a joué un rôle essentiel dans l'autonomisation économique des femmes en Afrique, offrant des opportunités de co-construction pour l'avenir.",
     image: "/images/photo35.jpg",
+    label: "Microfinance & Genre",
   },
   {
     id: 2,
-    title: "IMPACTS DE P.E.B.CO-BETHESDA : TÉMOIGNAGES",
-    author: "DISTINCTION 2025",
-    excerpt: "« Découvrez les parcours inspirants de nos meilleures clientes distinguées cette année, actrices majeures du développement local. »",
+    title: "Impacts de P.E.B.CO-BETHESDA : témoignages",
+    author: "Distinction 2025",
+    excerpt: "Découvrez les parcours inspirants de nos meilleures clientes distinguées cette année, actrices majeures du développement local.",
     image: "/images/photo39.png",
+    label: "Distinctions 2025",
   },
   {
     id: 3,
-    title: "DISCOURS MÉMORABLE SUR L'ÉGALITÉ",
-    author: "ÉVÉNEMENT COTONOU",
-    excerpt: "« Retour sur l'intervention marquante du point focal égalité homme-femme, une nouvelle page pour notre avenir commun. »",
+    title: "Discours mémorable sur l'égalité",
+    author: "Événement Cotonou",
+    excerpt: "Retour sur l'intervention marquante du point focal égalité homme-femme, une nouvelle page pour notre avenir commun.",
     image: "/images/photo40.png",
-  }
+    label: "Événement Cotonou",
+  },
 ];
+
+const styles = `
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+
+  .act-wrap {
+    font-family: 'DM Sans', sans-serif;
+    background: #faf9f6;
+    padding: 56px 40px 64px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ── Fond décoratif zigzag + cercles ── */
+  .act-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .act-bg svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .act-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  /* ── Header ── */
+  .act-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 32px;
+    gap: 16px;
+  }
+  .act-eyebrow {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: #c9a000;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .act-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 18px;
+    height: 1.5px;
+    background: #c9a000;
+  }
+  .act-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 400;
+    color: #1a1a1a;
+    line-height: 1.1;
+    letter-spacing: -.01em;
+    margin: 0;
+  }
+  .act-title em {
+    font-style: italic;
+    color: #E9C440;
+  }
+
+  /* ── Bouton voir toutes ── */
+  .act-btn-all {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px 8px 8px;
+    border: 1px solid rgba(26,26,26,.12);
+    border-radius: 100px;
+    background: white;
+    cursor: pointer;
+    transition: all .3s ease;
+    flex-shrink: 0;
+    outline: none;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .act-btn-all:hover { background: #0a1628; border-color: #0a1628; }
+  .act-btn-all:hover .act-btn-lbl { color: white; }
+  .act-btn-all:hover .act-btn-ic  { background: #E9C440; color: #0a1628; }
+
+  .act-btn-ic {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #f5f0d8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #c9a000;
+    transition: all .3s;
+  }
+  .act-btn-lbl {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: #0a1628;
+    transition: color .3s;
+  }
+
+  /* ── Layout principal ── */
+  .act-layout {
+    display: grid;
+    grid-template-columns: 1fr 390px;  /* 360px ou plus selon votre besoin */
+    align-items: stretch;
+  }
+
+  /* ── Carte contenu sombre ── */
+  .act-content {
+    background: #1a1a1a;
+    padding: 36px 36px 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 300px;
+  }
+  .act-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 11px;
+    color: #E9C440;
+    letter-spacing: .2em;
+    margin-bottom: 16px;
+    display: block;
+  }
+  .act-article-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: white;
+    line-height: 1.3;
+    margin-bottom: 6px;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+  }
+  .act-author {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: #E9C440;
+    margin-bottom: 16px;
+  }
+  .act-excerpt {
+    font-size: 13px;
+    font-weight: 300;
+    color: rgba(255,255,255,.65);
+    line-height: 1.7;
+    margin-bottom: 28px;
+    flex-grow: 1;
+    max-width: 480px;
+  }
+
+  /* ── Navigation ── */
+  .act-nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .act-nav-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.2);
+    background: rgba(255,255,255,.07);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all .3s;
+    color: rgba(255,255,255,.7);
+    outline: none;
+  }
+  .act-nav-btn:hover { background: #E9C440; border-color: #E9C440; color: #1a1a1a; }
+
+  .act-dots {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    margin-left: 4px;
+  }
+  .act-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.2);
+    transition: all .35s ease;
+  }
+  .act-dot.active {
+    background: #E9C440;
+    width: 18px;
+    border-radius: 3px;
+  }
+
+  /* ── Carte image carrée fixe ── */
+  .act-img-card {
+    position: relative;
+    overflow: hidden;
+    
+    flex-shrink: 0;
+  }
+  .act-img-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .8s cubic-bezier(.25,.46,.45,.94);
+  }
+  .act-img-card:hover img { transform: scale(1.04); }
+  .act-img-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(26,26,26,.6));
+    pointer-events: none;
+  }
+  .act-img-label {
+    position: absolute;
+    bottom: 14px;
+    left: 14px;
+    right: 14px;
+  }
+  .act-img-label span {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.8);
+  }
+
+  @media (max-width: 700px) {
+    .act-layout { grid-template-columns: 1fr; }
+    .act-img-card { aspect-ratio: 16/9; }
+    .act-top { flex-direction: column; }
+    .act-wrap { padding: 40px 20px 48px; }
+  }
+`;
+
+function BgDecor() {
+  return (
+    <div className="act-bg">
+      <svg viewBox="0 0 1200 560" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <path
+          /* Modification ici : on retire "H1100" à la fin */
+          d="M-80 430H130V300H360V160H500V70" 
+          stroke="#E9C440" strokeWidth="30" fill="none"
+          strokeLinejoin="miter" strokeMiterlimit="50"
+          opacity="70"
+        />
+        <circle cx="900" cy="480" r="100" fill="none" stroke="#E9C440" strokeWidth="1" opacity="0.12" />
+      </svg>
+    </div>
+  );
+}
 
 function Actualites() {
   const navigate = useNavigate();
@@ -39,127 +305,117 @@ function Actualites() {
   }, []);
 
   useEffect(() => {
-    if (!isPaused) {
-      const interval = setInterval(() => {
-        goTo(current + 1, 1);
-      }, 5000);
-      return () => clearInterval(interval);
-    }
+    if (isPaused) return;
+    const id = setInterval(() => goTo(current + 1, 1), 5000);
+    return () => clearInterval(id);
   }, [current, isPaused, goTo]);
 
   const article = articles[current];
 
   return (
-    <section className="relative py-12 bg-white overflow-hidden font-sans">
-      {/* Forme géométrique jaune en arrière-plan (zigzags à taille normale) */}
-      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        <svg 
-          viewBox="0 0 1440 800" 
-          fill="none" 
-          xmlns="http://www.w3.org/2000/svg" 
-          className="w-full h-full object-cover opacity-100"
-        >
-          <path 
-            d="M-100 650H150V480H350V310H750V140H1100V-50" 
-            stroke="#E9C440" 
-            strokeWidth="80"
-            strokeLinejoin="miter" 
-            strokeMiterlimit="60"
-            className="opacity-40 md:opacity-100"
-          />
-          <path 
-            d="M200 850H450V680H650V510H1050V340H1400V150" 
-            stroke="#E9C440" 
-            strokeWidth="60" 
-            className="opacity-10 md:opacity-100"
-          />
-        </svg>
-      </div>
+    <>
+      <style>{styles}</style>
+      <section className="act-wrap">
+        <BgDecor />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-4">
-        {/* En-tête : alignement en haut pour que le bouton reste au-dessus de l'image */}
-        <div className="flex flex-col md:flex-row md:items-start justify-between mb-6 gap-2">
-          <div>
-            <h2 className="text-2xl md:text-3xl font-light text-[#1a1a1a] leading-tight">
-              Dernières <br />
-              <span className="font-serif italic text-[#E9C440] font-semibold">Actualités</span>
-            </h2>
-            <div className="w-10 h-0.5 bg-[#E9C440] mt-2" />
+        <div className="act-inner">
+          {/* Header */}
+          <div className="act-top">
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <p className="act-eyebrow">Actualités</p>
+              <h2 className="act-title">
+                Dernières<br /><em>Actualités</em>
+              </h2>
+            </motion.div>
+
+            <motion.button
+              className="act-btn-all"
+              onClick={() => navigate('/actualite')}
+              initial={{ opacity: 0, x: 16 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.15 }}
+            >
+              <span className="act-btn-ic">
+                <EyeIcon style={{ width: 13, height: 13 }} />
+              </span>
+              <span className="act-btn-lbl">Voir toutes les actualités</span>
+            </motion.button>
           </div>
-          
-          <button 
-            onClick={() => navigate('/actualite')}
-            className="group flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-[#1a1a1a]/10 hover:bg-white/5 hover:text-black transition-all duration-300"
+
+          {/* Layout grille : contenu | image carrée fixe */}
+          <div
+            className="act-layout"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
           >
-            <span className="text-[10px] font-bold tracking-widest uppercase">Voir toutes les actualités</span>
-            <div className="w-6 h-6 rounded-full bg-[#E9C440] flex items-center justify-center text-black group-hover:bg-white transition-colors">
-              <EyeIcon className="w-3 h-3" />
+            {/* Carte sombre */}
+            <div className="act-content">
+              <AnimatePresence mode="wait" custom={dir}>
+                <motion.div
+                  key={article.id}
+                  initial={{ opacity: 0, x: dir * 40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: dir * -40 }}
+                  transition={{ duration: 0.5, ease: 'easeOut' }}
+                >
+                  <span className="act-num">
+                    {String(current + 1).padStart(2, '0')} / {String(articles.length).padStart(2, '0')}
+                  </span>
+                  <h3 className="act-article-title">{article.title}</h3>
+                  <p className="act-author">{article.author}</p>
+                  <p className="act-excerpt">{article.excerpt}</p>
+                </motion.div>
+              </AnimatePresence>
+
+              <div className="act-nav">
+                <button className="act-nav-btn" onClick={() => goTo(current - 1, -1)} aria-label="Précédent">
+                  <ArrowLeftIcon style={{ width: 14, height: 14 }} />
+                </button>
+                <button className="act-nav-btn" onClick={() => goTo(current + 1, 1)} aria-label="Suivant">
+                  <ArrowRightIcon style={{ width: 14, height: 14 }} />
+                </button>
+                <div className="act-dots">
+                  {articles.map((_, i) => (
+                    <div
+                      key={i}
+                      className={`act-dot${i === current ? ' active' : ''}`}
+                      onClick={() => goTo(i, i > current ? 1 : -1)}
+                      style={{ cursor: 'pointer' }}
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
-          </button>
-        </div>
 
-        <div 
-          className="relative flex flex-col md:flex-row items-center"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-        >
-          {/* Carte de contenu noire */}
-          <div className="w-full md:w-[85%] bg-[#1a1a1a] p-5 md:p-8 text-white relative z-20 shadow-2xl">
-            <AnimatePresence mode="wait" custom={dir}>
-              <motion.div
-                key={article.id}
-                initial={{ opacity: 0, x: dir * 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: dir * -50 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-              >
-                <h3 className="text-base md:text-lg font-bold tracking-wide mb-1 uppercase pr-10">
-                  {article.title}
-                </h3>
-                <p className="text-[#E9C440] text-xs italic mb-3 font-light">
-                  {article.author}
-                </p>
-                <p className="text-sm md:text-base font-light leading-relaxed mb-5 text-gray-200 md:max-w-[70%]">
-                  {article.excerpt}
-                </p>
-              </motion.div>
-            </AnimatePresence>
-
-            {/* Navigation */}
-            <div className="flex gap-2 relative z-40">
-              <button 
-                onClick={() => goTo(current - 1, -1)}
-                className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-white hover:bg-[#E9C440] hover:text-black transition-all border border-white/20"
-              >
-                <ArrowLeftIcon className="w-3.5 h-3.5" />
-              </button>
-              <button 
-                onClick={() => goTo(current + 1, 1)}
-                className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-white hover:bg-[#E9C440] hover:text-black transition-all border border-white/20"
-              >
-                <ArrowRightIcon className="w-3.5 h-3.5" />
-              </button>
+            {/* Image carrée — toujours au même emplacement, seul le contenu change */}
+            <div className="act-img-card">
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={article.id + '-img'}
+                  src={article.image}
+                  alt={article.title}
+                  initial={{ opacity: 0, scale: 1.06 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 1.06 }}
+                  transition={{ duration: 0.55 }}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', position: 'absolute', inset: 0 }}
+                />
+              </AnimatePresence>
+              <div className="act-img-overlay" />
+              <div className="act-img-label">
+                <span>{article.label}</span>
+              </div>
             </div>
           </div>
-
-          {/* Image circulaire flottante (taille inchangée) */}
-          <div className="relative z-30 mt-[-30px] md:mt-0 md:absolute md:right-[-15px] md:top-1/2 md:translate-y-[-50%]">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={article.id + "-img"}
-                initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
-                animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                exit={{ opacity: 0, scale: 0.8, rotate: 5 }}
-                transition={{ duration: 0.5 }}
-                className="w-56 h-56 md:w-72 md:h-72 rounded-full border-[4px] border-white shadow-2xl overflow-hidden"
-              >
-                <img src={article.image} alt="" className="w-full h-full object-cover" />
-              </motion.div>
-            </AnimatePresence>
-          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
 

@@ -194,8 +194,9 @@ export default function Advantages() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,700;1,700&family=DM+Sans:wght@300;400;500&display=swap');
 
-        .adv-section {
-          background: linear-gradient(135deg, #062c26 0%, #0a3d35 60%, #0f4d43 100%);
+       .adv-section {
+          /* Fond éclairci : passage de tons sombres à des tons plus vibrants et clairs */
+          background: linear-gradient(135deg, #0e5349 0%, #156358 50%, #1c7568 100%);
           position: relative;
           overflow: hidden;
           font-family: 'DM Sans', sans-serif;
@@ -203,7 +204,7 @@ export default function Advantages() {
           align-items: center;
           padding: 3.5rem 2rem 4rem;
         }
-
+          
         .adv-inner { position: relative; z-index: 3; max-width: 1080px; margin: 0 auto; width: 100%; }
 
         .adv-eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 0.8rem; }

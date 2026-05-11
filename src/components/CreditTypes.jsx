@@ -1,6 +1,6 @@
 // src/components/CreditTypes.jsx
 import { useNavigate } from 'react-router-dom';
-import { UserGroupIcon, HandRaisedIcon, HomeIcon, ShieldCheckIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
+import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import { motion } from 'framer-motion';
 
 const credits = [
@@ -9,145 +9,417 @@ const credits = [
     title: 'Crédit Individuel',
     category: 'Particuliers',
     description: 'Solutions de financement pour vos projets personnels, santé et équipements domestiques.',
-    icon: UserGroupIcon,
-    color: 'text-blue-700',
-    bgIcon: 'bg-blue-50',
     image: '/images/photo26.jpg',
-    detailPath: '/credit/individuel'
+    imgPosition: 'center top',
+    num: '01',
+    badgeCls: 'badge-blue',
+    iconCls: 'icon-blue',
+    icon: (
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="8" r="4" />
+        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+      </svg>
+    ),
   },
   {
     id: 'mutuel',
     title: 'Crédit Mutuel',
     category: 'Entrepreneuriat',
-    description: 'Un levier financier garanti par un groupe solidaire pour propulser les micro-projets.',
-    icon: HandRaisedIcon,
-    color: 'text-slate-700',
-    bgIcon: 'bg-slate-100',
+    description: 'Un levier financier garanti par un groupe solidaire pour propulser vos micro-projets.',
     image: '/images/photo25.jpg',
-    detailPath: '/credit/mutuel'
+    imgPosition: 'center center',
+    num: '02',
+    badgeCls: 'badge-slate',
+    iconCls: 'icon-slate',
+    icon: (
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </svg>
+    ),
   },
   {
     id: 'immobilier',
     title: 'Crédit Immobilier',
     category: 'Patrimoine',
-    description: 'Accompagnement sur mesure pour l’acquisition, la construction ou la rénovation de vos biens.',
-    icon: HomeIcon,
-    color: 'text-indigo-700',
-    bgIcon: 'bg-indigo-50',
+    description: "Accompagnement sur mesure pour l'acquisition, la construction ou la rénovation de vos biens.",
     image: '/images/photo22.jpg',
-    detailPath: '/credit/immobilier'
+    imgPosition: 'center center',
+    num: '03',
+    badgeCls: 'badge-gold',
+    iconCls: 'icon-gold',
+    icon: (
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        <polyline points="9 22 9 12 15 12 15 22" />
+      </svg>
+    ),
   },
 ];
+
+const styles = `
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+
+  /* ── Section ── */
+  .ct-wrap {
+    font-family: 'DM Sans', sans-serif;
+    background: #f7f6f3;
+    padding: 56px 40px 64px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ── Pattern décoratif en fond ── */
+  .ct-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    opacity: .045;
+  }
+  .ct-bg svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ── Header ── */
+  .ct-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    gap: 16px;
+    position: relative;
+    z-index: 2;
+  }
+  .ct-eyebrow {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: #2d6be4;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ct-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 1.5px;
+    background: #2d6be4;
+  }
+  .ct-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 3.5vw, 38px);
+    font-weight: 400;
+    color: #0a1628;
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    margin: 0;
+  }
+  .ct-title em {
+    font-style: italic;
+    color: #1a3a6e;
+  }
+
+  /* ── Bouton voir toutes les offres ── */
+  .ct-see-all {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 9px 18px 9px 9px;
+    border: 1px solid rgba(10,22,40,.14);
+    border-radius: 100px;
+    background: white;
+    transition: all .3s ease;
+    flex-shrink: 0;
+    outline: none;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .ct-see-all:hover {
+    background: #0a1628;
+    border-color: #0a1628;
+  }
+  .ct-see-all:hover .ct-sa-label { color: white; }
+  .ct-see-all:hover .ct-sa-icon  { background: #2d6be4; color: white; }
+
+  .ct-sa-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #e8f0fe;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #2d6be4;
+    transition: all .3s;
+  }
+  .ct-sa-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: #0a1628;
+    transition: color .3s;
+  }
+
+  /* ── Grille ── */
+  .ct-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    position: relative;
+    z-index: 2;
+  }
+  @media (max-width: 900px) {
+    .ct-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 580px) {
+    .ct-grid  { grid-template-columns: 1fr; }
+    .ct-header { flex-direction: column; align-items: flex-start; }
+    .ct-wrap  { padding: 40px 20px 48px; }
+  }
+
+  /* ── Carte ── */
+  .ct-card {
+    border-radius: 22px;
+    border: 1px solid rgba(10,22,40,.08);
+    cursor: pointer;
+    background: white;
+    /* padding crée l'espace autour de l'image */
+    padding: 16px;
+    transition: transform .4s cubic-bezier(.25,.46,.45,.94), box-shadow .4s;
+  }
+  .ct-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 48px rgba(10,22,40,.1);
+  }
+  .ct-card:hover .ct-card-img img {
+    transform: scale(1.04);
+  }
+  .ct-card:hover .ct-arrow {
+    background: #2d6be4;
+    color: white;
+  }
+
+  /* ── Image contenue dans le padding de la carte ── */
+  .ct-card-img {
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 16px;
+  height: 160px;
+  width: 300px;              /* largeur réduite */
+  margin-left: auto;
+  margin-right: auto;
+}
+  .ct-card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .7s cubic-bezier(.25,.46,.45,.94);
+    display: block;
+  }
+  .ct-img-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, transparent 40%, rgba(10,22,40,.3));
+    pointer-events: none;
+  }
+  .ct-badge {
+    position: absolute;
+    top: 11px;
+    left: 11px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+  .badge-blue  { background: rgba(45,107,228,.85); color: #deeaff; }
+  .badge-slate { background: rgba(10,22,40,.72);   color: #d0d4e0; }
+  .badge-gold  { background: rgba(180,140,40,.85); color: #fff2b8; }
+
+  .ct-num {
+    position: absolute;
+    bottom: 10px;
+    right: 12px;
+    font-family: 'Playfair Display', serif;
+    font-size: 44px;
+    font-weight: 700;
+    color: white;
+    opacity: .15;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* ── Contenu texte ── */
+  .ct-card-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .ct-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .icon-blue  { background: #eef3fd; color: #2d6be4; }
+  .icon-slate { background: #f1f1f3; color: #374151; }
+  .icon-gold  { background: #fdf5e0; color: #c9a84c; }
+
+  .ct-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #0a1628;
+    line-height: 1.2;
+    margin: 0;
+  }
+  .ct-desc {
+    font-size: 12px;
+    color: #6b7280;
+    line-height: 1.6;
+    margin-bottom: 14px;
+    font-weight: 300;
+  }
+  .ct-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 12px;
+    border-top: 1px solid rgba(10,22,40,.07);
+  }
+  .ct-explore {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: #0a1628;
+  }
+  .ct-arrow {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #f3f3f3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .3s;
+    color: #0a1628;
+  }
+`;
+
+function BgPattern() {
+  return (
+    <div className="ct-bg">
+  <svg
+    viewBox="0 0 1200 600"
+    preserveAspectRatio="xMidYMid slice"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <defs>
+      <pattern id="ct-dots" x="0" y="0" width="32" height="32" opacity="0.2" patternUnits="userSpaceOnUse">
+        <circle cx="0" cy="0" r="0" fill="#000000" />
+      </pattern>
+    </defs>
+    <rect width="1200" height="600" fill="url(#ct-dots)" />
+  </svg>
+</div>
+  );
+}
 
 function CreditTypes() {
   const navigate = useNavigate();
 
   return (
-    <section className="relative py-12 bg-[#fcfcfd] overflow-hidden">
-      {/* --- BACKGROUND ELEMENTS --- */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-        <div 
-          className="absolute inset-0 opacity-[0.03]" 
-          style={{ backgroundImage: 'radial-gradient(#475569 1px, transparent 0px)', backgroundSize: '32px 32px' }} 
-        />
-      </div>
+    <>
+      <style>{styles}</style>
+      <section className="ct-wrap">
+        <BgPattern />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8">
-        
-        {/* SECTION HEADER + CTA */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
+        {/* Header */}
+        <div className="ct-header">
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="max-w-2xl"
           >
-            <h2 className="text-4xl md:text-4xl font-extralight text-slate-900 leading-[1.1] mb-8">
-              <span className="font-semibold text-blue-900">Nos crédits</span>
+            <p className="ct-eyebrow">Solutions financières</p>
+            <h2 className="ct-title">
+              Nos <em>crédits</em>sur mesure
             </h2>
-            <div className="w-24 h-1.5 bg-blue-900 rounded-full" />
           </motion.div>
 
-          {/* Bouton Voir toutes les offres */}
-          <motion.div
+          <motion.button
+            className="ct-see-all"
+            onClick={() => navigate('/offres')}
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <button 
-              onClick={() => navigate('/offres')}
-              className="group flex items-center gap-3 px-4 py-2 bg-white border border-slate-300 rounded-1xl transition-all duration-300"
-            >
-              <span className="text-xs font-bold uppercase tracking-widest text-slate-700 transition-colors">
-                Voir toutes les offres
-              </span>
-              <div className="p-1.5 rounded-lg bg-slate-50 text-slate-400 group-hover:bg-slate-600 group-hover:text-white transition-all duration-300">
-                <ArrowRightIcon className="w-4 h-4" />
-              </div>
-            </button>
-          </motion.div>
+            <span className="ct-sa-icon">
+              <ArrowRightIcon style={{ width: 13, height: 13 }} />
+            </span>
+            <span className="ct-sa-label">Voir toutes les offres</span>
+          </motion.button>
         </div>
 
-        {/* CARDS GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Grille de cartes */}
+        <div className="ct-grid">
           {credits.map((credit, i) => (
-            <motion.div 
+            <motion.div
               key={credit.id}
+              className="ct-card"
+              onClick={() => navigate(`/credit/${credit.id}`, { state: { creditId: credit.id } })}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              onClick={() => navigate(`/credit/${credit.id}`, { state: { creditId: credit.id } })}
-              className="cursor-pointer relative bg-gray-100 border border-slate-100 rounded-3xl p-6 flex flex-col h-full transition-all duration-500 hover:-translate-y-2"
+              transition={{ duration: 0.5, delay: i * 0.12 }}
             >
-              {/* Image Container */}
-              <div className="relative h-44 mb-8 overflow-hidden rounded-2xl shadow-inner">
-                <img 
-                  src={credit.image} 
+              {/* Image recadrée, plus petite que la carte grâce au padding */}
+              <div className="ct-card-img">
+                <img
+                  src={credit.image}
                   alt={credit.title}
-                  className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110"
+                  style={{ objectPosition: credit.imgPosition }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent opacity-60 group-hover:opacity-20 transition-opacity duration-500" />
-                <div className="absolute top-4 left-4">
-                  <span className="px-3 py-1 bg-white/90 backdrop-blur-md text-[9px] font-black uppercase tracking-tighter text-slate-800 rounded-lg shadow-sm">
-                    {credit.category}
-                  </span>
-                </div>
+                <div className="ct-img-overlay" />
+                <span className={`ct-badge ${credit.badgeCls}`}>{credit.category}</span>
+                <span className="ct-num">{credit.num}</span>
               </div>
 
-              {/* Content */}
-              <div className="flex flex-col flex-grow px-2">
-                <div className="flex items-center gap-4 mb-5">
-                  <div className={`flex-shrink-0 p-2.5 rounded-xl ${credit.bgIcon} ${credit.color} ring-1 ring-inset ring-black/5`}>
-                    <credit.icon className="w-6 h-6" />
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-900 leading-none">
-                    {credit.title}
-                  </h3>
-                </div>
-
-                <p className="text-slate-500 text-[14px] leading-relaxed font-normal mb-8 flex-grow">
-                  {credit.description}
-                </p>
-
-                {/* Footer Action */}
-                <div className="flex items-center justify-between pt-6 border-t border-black/30">
-                  <span className="text-[11px] font-bold uppercase tracking-widest text-slate-800 group-hover:text-slate-600 transition-colors">
-                    Explorer l'offre
-                  </span>
-                  <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-600 group-hover:bg-slate-600 group-hover:text-white transition-all duration-300">
-                    <ArrowRightIcon className="w-4 h-4" />
-                  </div>
+              {/* Texte */}
+              <div className="ct-card-top">
+                <div className={`ct-icon ${credit.iconCls}`}>{credit.icon}</div>
+                <h3 className="ct-card-title">{credit.title}</h3>
+              </div>
+              <p className="ct-desc">{credit.description}</p>
+              <div className="ct-footer">
+                <span className="ct-explore">Explorer l'offre</span>
+                <div className="ct-arrow">
+                  <ArrowRightIcon style={{ width: 13, height: 13 }} />
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
 

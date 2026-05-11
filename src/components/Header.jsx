@@ -1,19 +1,63 @@
-import { useState, useEffect } from 'react';
-import { UserCircleIcon, CurrencyDollarIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { Link } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { Link, useLocation } from 'react-router-dom';
 
 function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const searchRef = useRef(null);
+  const inputRef = useRef(null);
+  const location = useLocation();
+
+  const isHomePage = location.pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 10);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Définition des liens basée exactement sur vos Routes
+  // Gestion du clic en dehors et de la touche Échap
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowSearch(false);
+        setSearchQuery('');
+      }
+    };
+    const handleEsc = (event) => {
+      if (event.key === 'Escape') {
+        setShowSearch(false);
+        setSearchQuery('');
+      }
+    };
+    if (showSearch) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleEsc);
+      if (inputRef.current) inputRef.current.focus();
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEsc);
+    };
+  }, [showSearch]);
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      console.log('Recherche :', searchQuery);
+      // Ici redirection ou appel API
+      // window.location.href = `/recherche?q=${searchQuery}`;
+      setShowSearch(false);
+      setSearchQuery('');
+    }
+  };
+
+  const isTransparent = isHomePage && !isScrolled;
+
   const navLinks = [
     { name: 'Accueil', path: '/' },
     { name: 'Nos offres', path: '/offres' },
@@ -26,51 +70,51 @@ function Header() {
 
   return (
     <header 
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-in-out ${
-        isScrolled 
-          ? "bg-white/90 backdrop-blur-lg py-2" 
-          : "bg-gradient-to-b from-black/50 to-transparent py-5" 
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-200 ease-in-out will-change-[background,padding] ${
+        isTransparent 
+          ? "bg-transparent py-5" 
+          : "bg-white/95 backdrop-blur-md py-3 shadow-sm border-b border-slate-100"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 flex justify-between items-center">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 flex justify-between items-center gap-6">
         
-        {/* LOGO - Retour à l'accueil */}
-        <Link to="/" className="flex items-center gap-3 group transition-transform duration-500">
-          <div className={`p-2 rounded-xl border transition-all duration-500 ease-in-out ${
-            isScrolled 
-              ? "bg-blue-600 border-blue-600 shadow-lg scale-90" 
-              : "bg-white/10 border-white/20 backdrop-blur-md scale-100"
-          }`}>
-            <CurrencyDollarIcon className="w-7 h-7 text-white" />
+        {/* LOGO */}
+        <Link to="/" className="flex items-center gap-3 group shrink-0">
+          <div className={`transition-all duration-200 ${isScrolled ? "scale-90" : "scale-100"}`}>
+            <img 
+              src="/images/pebco_logo.png" 
+              alt="PEBCO BETHESDA Logo" 
+              className="w-auto h-10 object-contain"
+            />
           </div>
-          <div className={`transition-transform duration-500 ${isScrolled ? "scale-95 origin-left" : ""}`}>
-            <div className={`text-2xl font-black tracking-tighter transition-colors duration-500 ${
-              isScrolled ? "text-slate-900" : "text-white"
+          <div className={`flex flex-col transition-transform duration-200 ${!isTransparent ? "scale-95 origin-left" : ""}`}>
+            <span className={`text-2xl font-black tracking-tighter leading-none transition-colors duration-200 ${
+              isTransparent ? "text-white" : "text-slate-900"
             }`}>
               PEBCO
-            </div>
-            <div className={`text-[10px] font-bold tracking-[0.2em] -mt-1 transition-colors duration-500 ${
-              isScrolled ? "text-blue-600" : "text-blue-300"
+            </span>
+            <span className={`text-[9px] font-bold tracking-[0.3em] transition-colors duration-200 ${
+              isTransparent ? "text-blue-300" : "text-blue-600"
             }`}>
-              FINANCE
-            </div>
+              BETHESDA
+            </span>
           </div>
         </Link>
 
-        {/* NAVIGATION DYNAMIQUE */}
-        <nav className="hidden lg:block">
-          <ul className="flex space-x-8">
+        {/* NAVIGATION CENTRALE */}
+        <nav className="hidden lg:block absolute left-1/2 -translate-x-1/2">
+          <ul className="flex space-x-7">
             {navLinks.map((link) => (
               <li key={link.path}>
                 <Link 
                   to={link.path} 
-                  className={`text-sm font-bold transition-all duration-500 relative group py-2 ${
-                    isScrolled ? "text-slate-600 hover:text-blue-600" : "text-white/90 hover:text-white"
+                  className={`text-[11px] font-bold transition-colors duration-200 relative group py-2 uppercase tracking-wide ${
+                    isTransparent ? "text-white/90 hover:text-white" : "text-slate-600 hover:text-blue-600"
                   }`}
                 >
                   {link.name}
-                  <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 transition-all duration-300 ease-out group-hover:w-full ${
-                    isScrolled ? "bg-blue-600" : "bg-blue-400"
+                  <span className={`absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300 ease-out group-hover:w-full ${
+                    isTransparent ? "bg-white" : "bg-blue-600"
                   }`} />
                 </Link>
               </li>
@@ -78,21 +122,41 @@ function Header() {
           </ul>
         </nav>
 
-        {/* ACTIONS */}
-        <div className="flex items-center gap-8">
-          <MagnifyingGlassIcon className={`w-5 h-5 cursor-pointer hover:scale-110 transition-all duration-500 ${
-            isScrolled ? "text-slate-500" : "text-white"
-          }`} />
-          
-          {/* Bouton Espace Client (peut être lié à une page login si vous en avez une) */}
-          <button className={`flex items-center gap-2 px-7 py-2.5 rounded-full font-bold text-sm transition-all duration-500 active:scale-90 ${
-            isScrolled 
-              ? "bg-blue-600 text-white hover:bg-blue-700 shadow-blue-200" 
-              : "bg-white text-blue-900 hover:bg-blue-50"
-          }`}>
-            <UserCircleIcon className="w-5 h-5" /> 
-            <span className="hidden sm:inline">Se Connecter</span>
-          </button>
+        {/* RECHERCHE : icône seule, input au clic */}
+        <div className="flex items-center gap-3 shrink-0">
+          <div ref={searchRef} className="relative flex items-center">
+            <button
+              onClick={() => setShowSearch(true)}
+              className={`p-2 rounded-full transition-all duration-200 ${
+                isTransparent ? "hover:bg-white/10" : "hover:bg-slate-100"
+              }`}
+              aria-label="Rechercher"
+            >
+              <MagnifyingGlassIcon className={`w-5 h-5 transition-colors duration-200 ${
+                isTransparent ? "text-white" : "text-slate-600"
+              }`} />
+            </button>
+
+            <form
+              onSubmit={handleSearchSubmit}
+              className={`overflow-hidden transition-all duration-300 ease-out ${
+                showSearch ? "w-48 ml-1" : "w-0"
+              }`}
+            >
+              <input
+                ref={inputRef}
+                type="text"
+                placeholder="Rechercher..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className={`w-full py-2 px-2 text-sm rounded-full border outline-none transition-colors duration-200 ${
+                  isTransparent
+                    ? "bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                    : "bg-slate-100 border-slate-200 text-slate-700 placeholder:text-slate-400 focus:bg-white focus:border-blue-400"
+                }`}
+              />
+            </form>
+          </div>
         </div>
       </div>
     </header>

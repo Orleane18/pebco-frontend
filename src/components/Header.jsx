@@ -10,7 +10,8 @@ function Header() {
   const inputRef = useRef(null);
   const location = useLocation();
 
-  const isHomePage = location.pathname === "/";
+  // On supprime la variable isHomePage, car on veut la transparence partout
+  // const isHomePage = location.pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,7 +57,8 @@ function Header() {
     }
   };
 
-  const isTransparent = isHomePage && !isScrolled;
+  // Transparent partout tant que l'utilisateur n'a pas défilé
+  const isTransparent = !isScrolled;
 
   const navLinks = [
     { name: 'Accueil', path: '/' },

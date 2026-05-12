@@ -75,35 +75,29 @@ function OffresPage() {
 
   return (
     <div className="bg-white min-h-screen">
-      {/* HEADER INSTITUTIONNEL */}
-      <section className="relative py-20 bg-slate-900 overflow-hidden">
-        <div className="absolute inset-0 opacity-20" 
-             style={{ backgroundImage: `url('/images/photo11.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/80 to-transparent" />
-        
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-          <motion.nav 
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-blue-400 mb-6"
-          >
-            <a href="/" className="hover:text-white transition">Accueil</a>
-            <span className="text-slate-500">/</span>
-            <span className="text-slate-300">Solutions de Financement</span>
-          </motion.nav>
-          
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-[40px] font-light text-white leading-tight max-w-3xl"
-          >
-            Nos offres de <br />
-            <span className="font-semibold text-blue-500">crédit structurées.</span>
-          </motion.h1>
-        </div>
-      </section>
+      {/* BANNIÈRE PAGE OFFRES */}
+<section className="relative py-32 md:py-40 overflow-hidden">
+  <div className="absolute inset-0" style={{ backgroundImage: `url('/images/photo52.jpg')`, backgroundSize: 'cover' }} />
+  <div className="absolute inset-0 bg-black/30" />
+  <div className="relative z-10 max-w-7xl mx-auto px-6">
+    <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
+      <span className="text-blue-400 font-bold text-xs uppercase tracking-[0.3em] mb-3 block">Nos solutions</span>
+      <h1 className="text-3xl md:text-4xl font-light text-white mb-3">
+        Des crédits <span className="font-semibold text-blue-400">sur mesure</span>
+      </h1>
+      <p className="text-slate-300 max-w-md font-light text-sm">
+        Découvrez nos offres adaptées à vos besoins : crédit immobilier, véhicule, équipement et mutuel.
+      </p>
+    </motion.div>
+  </div>
+  <div className="absolute bottom-0 left-0 right-0">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 80" className="w-full h-auto" style={{ display: 'block' }}>
+      <path fill="#F8FAFC" fillOpacity="1" d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z" />
+    </svg>
+  </div>
+</section>
 
-      {/* GRILLE D'OFFRES */}
+      
       {/* GRILLE D'OFFRES */}
 <section className="relative py-16 -mt-10">
   <div className="max-w-6xl mx-auto px-6 lg:px-8">
@@ -115,7 +109,7 @@ function OffresPage() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: idx * 0.1 }}
-          className="group relative bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 p-5 flex flex-col h-full w-full"
+          className="group relative bg-white rounded-2xl border border-slate-200 transition-all duration-300 p-5 flex flex-col h-full w-full"
         >
           {/* Image Section */}
           <div className="relative h-40 mb-4 overflow-hidden rounded-xl">

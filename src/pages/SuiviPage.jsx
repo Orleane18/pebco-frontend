@@ -72,26 +72,36 @@ function SuiviPage() {
 
   return (
     <div className="bg-white min-h-screen">
-      {/* HEADER INSTITUTIONNEL */}
-      <section className="relative py-24 bg-slate-900 overflow-hidden">
-        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: `url('/images/photo11.jpg')`, backgroundSize: 'cover' }} />
-        
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 text-center">
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-5xl font-light text-white mb-6"
-          >
-            Espace de <span className="font-semibold text-blue-500">Suivi.</span>
-          </motion.h1>
-          <p className="text-white max-w-xl mx-auto font-light text-sm tracking-wide">
-            Consultez l'évolution de votre dossier en temps réel avec votre numéro de référence.
-          </p>
-        </div>
-      </section>
+      {/* BANNIÈRE PAGE SUIVI - image visible, hauteur augmentée */}
+<section className="relative py-32 md:py-40 overflow-hidden">
+  {/* Image de fond pleine opacité */}
+  <div className="absolute inset-0" style={{ backgroundImage: `url('/images/photo55.png')`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+  
+  {/* Overlay léger pour la lisibilité du texte (optionnel) */}
+  <div className="absolute inset-0 bg-black/30" />
+  
+  <div className="relative z-10 max-w-7xl mx-auto px-6">
+    <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
+      <span className="text-blue-400 font-bold text-xs uppercase tracking-[0.3em] mb-3 block">Espace client</span>
+      <h1 className="text-3xl md:text-4xl font-light text-white mb-3">
+        Suivez votre <span className="font-semibold text-blue-400">dossier en temps réel</span>
+      </h1>
+      <p className="text-slate-300 max-w-md font-light text-sm">
+        Accédez à l’état d’avancement de votre demande, téléchargez vos documents et recevez les notifications.
+      </p>
+    </motion.div>
+  </div>
+  
+  {/* Vague décorative - adapter la couleur au fond de la page */}
+  <div className="absolute bottom-0 left-0 right-0">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 80" className="w-full h-auto" style={{ display: 'block' }}>
+      <path fill="#F8FAFC" fillOpacity="1" d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z" />
+    </svg>
+  </div>
+</section>
 
       {/* ZONE DE RECHERCHE */}
-      <section className="relative -mt-12 pb-24">
+      <section className="relative pt-8 pb-24">
         <div className="max-w-4xl mx-auto px-6">
           <div className="bg-white rounded-[2rem] shadow-2xl shadow-slate-200/50 p-2 border border-slate-300">
             <form onSubmit={handleRecherche} className="flex flex-col md:flex-row gap-2">

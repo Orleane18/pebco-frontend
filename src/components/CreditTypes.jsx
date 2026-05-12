@@ -360,7 +360,7 @@ function CreditTypes() {
           >
             <p className="ct-eyebrow">Solutions financières</p>
             <h2 className="ct-title">
-              Nos <em>crédits</em>sur mesure
+              Nos <em>crédits</em> sur mesure
             </h2>
           </motion.div>
 

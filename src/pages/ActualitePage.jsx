@@ -1,181 +1,256 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  CalendarIcon, 
-  UserIcon, 
-  ClockIcon, 
-  ChevronRightIcon,
-  ArrowLongRightIcon 
-} from '@heroicons/react/24/outline';
 import { motion } from 'framer-motion';
+import {
+  ArrowLongRightIcon,
+  ClockIcon,
+  MagnifyingGlassIcon,
+  UserCircleIcon,
+} from '@heroicons/react/24/outline';
 
+/* ─── DATA ───────────────────────────────────────────── */
 const articles = [
-  {
-    id: 1,
-    title: "Femmes et microfinance : une alliance puissante pour le progrès économique en Afrique",
-    excerpt: "La microfinance transforme la vie des femmes en Afrique. Découvrez comment P.E.B.Co-BETHESDA contribue à cette dynamique.",
-    content: `La microfinance a permis à des millions de femmes africaines de sortir de la pauvreté et de devenir des actrices économiques influentes. Grâce à l’accès aux services financiers, elles ont pu créer ou développer des petites entreprises, accéder à l’éducation, aux soins de santé et améliorer leur qualité de vie.
-
-Le microcrédit au Bénin
-Promu par l’ancien président Yayi Boni, le microcrédit a d’abord visé l’inclusion financière des femmes et des personnes défavorisées. Ce programme a évolué pour donner naissance au crédit Alafia, une initiative offrant des prêts à taux abordables, des formations en gestion et un accompagnement technique. Depuis son lancement, Alafia a permis à de nombreuses Béninoises de créer des activités durables et d’améliorer leurs conditions de vie.
-
-Pourquoi la microfinance est‑elle importante pour les femmes ?
-•Autonomie économique : elles deviennent financièrement indépendantes, renforçant leur estime de soi.
-•Réduction de la pauvreté : des entreprises durables génèrent des revenus stables.
-•Inclusion financière : accès à l’épargne, aux prêts et aux assurances.
-•Renforcement des capacités : formations en entrepreneuriat et gestion.
-•Impact communautaire : les femmes investissent dans l’éducation et la santé de leurs enfants, créant un cercle vertueux.
-
-En soutenant la microfinance, l’Afrique renforce une alliance puissante pour un progrès économique durable.`,
-    date: "26 Jan 2025",
-    author: "P.E.B.Co-BETHESDA",
-    readTime: "4 min",
-    category: "Actualités",
-    image: "/images/photo35.jpg"
-  },
-  {
-    id: 2,
-    title: "Impacts de P.E.B.Co-BETHESDA dans la vie de sa clientèle : témoignages de deux clientes",
-    excerpt: "À l’occasion de la célébration des femmes, deux clientes exemplaires ont partagé leur parcours inspirant.",
-    content: `Le vendredi 15 mars 2024, les départements du Littoral et de l’Atlantique étaient à l’honneur lors de la première édition de la célébration des femmes à P.E.B.Co-BETHESDA. L’événement, organisé dans le hall de l’institution, a réuni de nombreuses clientes venues des agences de ces régions.
-
-Ces femmes fidèles et exemplaires – parmi les plus prolifiques et sans retard de remboursement – ont été distinguées pour leur confiance et leur relation solide avec l’institution. Chaque agence a récompensé trois clientes selon des critères précis : ancienneté, montant du crédit, nombre de crédits successifs, genre et ponctualité des remboursements.
-
-La cérémonie a mis en lumière des parcours inspirants, illustrant comment P.E.B.Co-BETHESDA transforme des vies par l’accès au crédit.`,
-    date: "27 Oct 2025",
-    author: "P.E.B.Co-BETHESDA",
-    readTime: "5 min",
-    category: "Témoignages",
-    image: "/images/photo39.png"
-  },
-  {
-    id: 3,
-    title: "Le discours mémorable du point focal égalité femme-homme pendant la célébration de la femme à P.E.B.Co-BETHESDA",
-    excerpt: "Le 15 mars 2024 à Cotonou, un discours fort a marqué la célébration des femmes, appelant à plus d’égalité.",
-    content: `Le 15 mars 2024 à Cotonou, P.E.B.Co-BETHESDA a célébré les femmes. Madame Christiane DOVONOU, point focal de l’égalité femme‑homme (EFH) grâce au programme ADAPAMI, a prononcé un discours marquant.
-
-Après avoir salué les autorités et les invités, elle a rappelé que cette journée est l’occasion de lutter pour les droits des femmes, de réduire les inégalités et de valoriser la gent féminine. « L’heure n’est plus à la mendicité de nos droits, car la vraie liberté ne s’acquiert jamais sans lutte », a‑t‑elle déclaré.
-
-Elle a interpellé ses sœurs : « Que faisons‑nous pour le développement de notre institution ? » Sur plus de 500 agents, 214 sont des femmes, mais seulement deux occupent des postes de chef de service et douze sont cheffes d’agence. Elle a demandé au Directeur Général de rétablir la parité.
-
-Elle a aussi proposé l’institutionnalisation de cette célébration et la création d’une amicale des femmes, comme organe consultatif dans les instances de décision.
-
-En réponse, le Directeur Général, M. HOUNSOU Cyrille, a donné son accord de principe : « Les femmes travailleuses, nos amazones, peuvent désormais avoir leur amicale. La Direction Générale s’engage à promouvoir davantage la femme dans les cercles de responsabilité. »`,
-    date: "21 Oct 2025",
-    author: "P.E.B.Co-BETHESDA",
-    readTime: "3 min",
-    category: "Événement",
-    image: "/images/photo40.png"
-  },
-  {
-    id: 4,
-    title: "Lancement de la carte P.E.B.Co-BETHESDA",
-    excerpt: "Une carte pour économiser au quotidien et soutenir les commerces locaux.",
-    content: `La Carte P.E.B.Co-BETHESDA est votre alliée pour des économies au quotidien, tout en favorisant la croissance des commerces locaux. Grâce à cette carte, bénéficiez de réductions considérables sur l’alimentation, la mode, la santé, l’éducation, et bien plus.
-
-En choisissant la carte P.E.B.Co-BETHESDA, vous soutenez une consommation responsable qui dynamise les petites entreprises. Les commerçants partenaires gagnent en visibilité et accèdent à des financements. Un partenariat gagnant‑gagnant, où chaque achat devient un acte de solidarité économique.`,
-    date: "21 Oct 2025",
-    author: "P.E.B.Co-BETHESDA",
-    readTime: "3 min",
-    category: "Événement",
-    image: "/images/photo41.jpg"
-  }
+  {
+    id: 1,
+    title: "Femmes et microfinance : une alliance puissante pour le progrès économique en Afrique",
+    excerpt: "La microfinance transforme la vie des femmes en Afrique. Découvrez comment P.E.B.Co-BETHESDA contribue à cette dynamique.",
+    date: "26 Jan 2025",
+    author: "M. Sossou",
+    readTime: "4 min",
+    category: "Actualités",
+    image: "/images/photo35.jpg",
+  },
+  {
+    id: 2,
+    title: "Impacts de P.E.B.Co-BETHESDA dans la vie de sa clientèle : témoignages de deux clientes",
+    excerpt: "À l'occasion de la célébration des femmes, deux clientes exemplaires ont partagé leur parcours inspirant.",
+    date: "27 Oct 2025",
+    author: "A. Agbossa",
+    readTime: "5 min",
+    category: "Témoignages",
+    image: "/images/photo39.png",
+  },
+  {
+    id: 3,
+    title: "Le discours mémorable du point focal égalité femme-homme pendant la célébration",
+    excerpt: "Le 15 mars 2024 à Cotonou, un discours fort a marqué la célébration des femmes, appelant à plus d'égalité.",
+    date: "21 Oct 2025",
+    author: "D. Houndjo",
+    readTime: "3 min",
+    category: "Événement",
+    image: "/images/photo40.png",
+  },
+  {
+    id: 4,
+    title: "Lancement de la carte P.E.B.Co-BETHESDA",
+    excerpt: "Une carte pour économiser au quotidien et soutenir les commerces locaux partenaires de l'institution.",
+    date: "21 Oct 2025",
+    author: "K. Alidou",
+    readTime: "3 min",
+    category: "Événement",
+    image: "/images/photo41.jpg",
+  },
 ];
 
+const CATEGORIES = ["Tous", "Actualités", "Témoignages", "Événement"];
+
+/* ─── CATEGORY PILL ───────────────────────────────────────── */
+const categoryColors = {
+  Actualités: { bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-100' },
+  Témoignages: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-100' },
+  Événement: { bg: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-100' },
+};
+
+function CatPill({ cat, small = false }) {
+  const c = categoryColors[cat] ?? { bg: 'bg-slate-100', text: 'text-slate-700', border: 'border-slate-200' };
+  return (
+    <span className={`inline-flex items-center rounded-full border font-bold uppercase tracking-wider
+      ${c.bg} ${c.text} ${c.border}
+      ${small ? 'text-[9px] px-2.5 py-1' : 'text-[10px] px-3 py-1'}`}>
+      {cat}
+    </span>
+  );
+}
+
+/* ─── ARTICLE CARD (design amélioré) ────────── */
+function ArticleCard({ article, onClick, index }) {
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.1 }}
+      onClick={onClick}
+      className="group relative h-[380px] w-full rounded-3xl overflow-hidden cursor-pointer
+                 border border-slate-300/30 shadow-lg hover:shadow-2xl hover:scale-[1.01]
+                 ring-1 ring-white/5 transition-all duration-500 ease-out"
+    >
+      {/* Image de fond avec zoom subtil au survol */}
+      <div className="absolute inset-0">
+        <img
+          src={article.image}
+          alt=""
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+        />
+      </div>
+
+      {/* Contenu textuel sur fond dégradé plus doux */}
+      <div className="absolute bottom-0 inset-x-0 p-5 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+        <div className="flex items-center justify-between mb-3">
+          <CatPill cat={article.category} small />
+          <span className="text-[10px] text-white/80 font-bold uppercase tracking-widest">
+            {article.date}
+          </span>
+        </div>
+
+        <h3 className="text-lg font-bold text-white leading-tight mb-2 line-clamp-2 group-hover:text-blue-300 transition-colors">
+          {article.title}
+        </h3>
+
+        <p className="text-gray-200 text-xs leading-relaxed mb-4 line-clamp-2 font-light">
+          {article.excerpt}
+        </p>
+
+        {/* Footer de la carte */}
+        <div className="flex items-center justify-between pt-4 border-t border-white/20">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+              <UserCircleIcon className="w-4 h-4 text-white" />
+            </div>
+            <span className="text-[11px] text-gray-300 font-medium">{article.author}</span>
+          </div>
+
+          <div className="flex items-center gap-1.5 text-white font-black text-[10px] uppercase tracking-[0.15em] group-hover:text-blue-300 transition-colors">
+            Lire <ArrowLongRightIcon className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </div>
+        </div>
+      </div>
+
+      {/* Badge de temps de lecture – fond clair pour mieux contraster */}
+      <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1.5 bg-white/80 backdrop-blur-sm rounded-full border border-white/60 text-slate-800 text-[9px] font-bold uppercase tracking-widest">
+        <ClockIcon className="w-3.5 h-3.5" />
+        {article.readTime}
+      </div>
+    </motion.article>
+  );
+}
+
+/* ─── STATS TICKER ───────────────────────────────────── */
+// const stats = [
+//   { value: '30+', label: "Années d'expérience" },
+//   { value: '69+', label: 'Agences' },
+//   { value: '13 555+', label: 'Clients' },
+//   { value: '1 200+', label: 'Crédits accordés' },
+//   { value: '98%', label: 'Satisfaction' },
+// ];
+
+// function StatsTicker() {
+//   return (
+//     <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-y border-blue-100 py-4 overflow-hidden">
+//       <motion.div
+//         className="flex gap-14 whitespace-nowrap"
+//         animate={{ x: ['0%', '-50%'] }}
+//         transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+//         style={{ width: 'max-content' }}
+//       >
+//         {[...stats, ...stats].map((s, i) => (
+//           <div key={i} className="flex items-center gap-3 flex-shrink-0">
+//             <span className="text-blue-700 font-black text-sm">{s.value}</span>
+//             <span className="text-slate-600 text-xs uppercase tracking-wider font-medium">{s.label}</span>
+//             <span className="w-1 h-1 rounded-full bg-blue-300" />
+//           </div>
+//         ))}
+//       </motion.div>
+//     </div>
+//   );
+// }
+
+/* ─── MAIN PAGE ────────────────────────────────────────── */
 function ActualitePage() {
   const navigate = useNavigate();
-  const featuredArticle = articles[0];
-  const remainingArticles = articles.slice(1);
+  const [activeCategory, setActiveCategory] = useState('Tous');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredArticles = articles.filter(article => {
+    if (activeCategory !== 'Tous' && article.category !== activeCategory) return false;
+    if (searchQuery && !article.title.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+    return true;
+  });
+
+  const goTo = (article) =>
+    navigate(`/actualite/article/${article.id}`, { state: { article } });
 
   return (
-    <div className="bg-[#F8FAFC] min-h-screen pb-20 font-sans">
-      
-      {/* HEADER INSTITUTIONNEL (Même style que Remboursement) */}
-      <section className="relative py-20 bg-slate-900 overflow-hidden">
-        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: `url('/images/photo11.jpg')`, backgroundSize: 'cover' }} />
-        
-        <div className="relative z-10 max-w-7xl mx-auto px-6">
-          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-            <span className="text-blue-500 font-bold text-xs uppercase tracking-[0.3em] mb-4 block">Média</span>
-            <h1 className="text-4xl md:text-5xl font-light text-white mb-4">
-              Actualités & <span className="font-semibold text-blue-500">Impact.</span>
-            </h1>
-            <p className="text-slate-400 max-w-md font-light text-sm">
-              Suivez l'évolution de nos actions et l'impact de nos solutions sur le terrain.
-            </p>
-          </motion.div>
-        </div>
-      </section>
+    <div className="min-h-screen bg-slate-100 font-sans antialiased">
 
-      <div className="max-w-6xl mx-auto px-6 -mt-12 relative z-20">
-        
-        {/* ARTICLE À LA UNE (Format réduit) */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="cursor-pointer bg-white rounded-[2.5rem] overflow-hidden shadow-sm border border-slate-100 flex flex-col lg:flex-row mb-12"
-          onClick={() => navigate(`/actualite/article/${featuredArticle.id}`, { state: { article: featuredArticle } })}
-        >
-          <div className="lg:w-1/2 h-64 lg:h-auto overflow-hidden">
-            <img src={featuredArticle.image} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-          </div>
-          <div className="lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center">
-            <div className="flex items-center gap-3 mb-4">
-              <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter">
-                {featuredArticle.category}
-              </span>
-              <span className="text-slate-400 text-[11px] font-bold uppercase tracking-widest">{featuredArticle.date}</span>
-            </div>
-            <h2 className="text-2xl font-bold text-slate-900 mb-4 group-hover:text-blue-600 transition-colors">
-              {featuredArticle.title}
-            </h2>
-            <p className="text-slate-500 text-sm leading-relaxed mb-6 line-clamp-2">
-              {featuredArticle.excerpt}
-            </p>
-            <div className="flex items-center justify-between pt-6 border-t border-slate-50 mt-auto">
-               <span className="text-[10px] font-black uppercase tracking-widest text-slate-900 flex items-center gap-2">
-                 Lire l'article <ArrowLongRightIcon className="w-5 h-5 text-blue-500" />
-               </span>
-               <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{featuredArticle.readTime}</span>
-            </div>
-          </div>
-        </motion.div>
+    {/* BANNIÈRE PAGE ACTUALITÉS */}
+<section className="relative py-32 md:py-40 overflow-hidden">
+  <div className="absolute inset-0" style={{ backgroundImage: `url('/images/photo58.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+  <div className="absolute inset-0 bg-black/30" />
+  <div className="relative z-10 max-w-7xl mx-auto px-6">
+    <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
+      <span className="text-blue-400 font-bold text-xs uppercase tracking-[0.3em] mb-3 block">Média centre</span>
+      <h1 className="text-3xl md:text-4xl font-light text-white mb-3">
+        Actualités & <span className="font-semibold text-blue-400">Impact terrain</span>
+      </h1>
+      <p className="text-slate-300 max-w-md font-light text-sm">
+        Découvrez les dernières nouvelles de P.E.B.Co-BETHESDA, nos projets innovants et les histoires inspirantes.
+      </p>
+    </motion.div>
+  </div>
+  <div className="absolute bottom-0 left-0 right-0">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 80" className="w-full h-auto" style={{ display: 'block' }}>
+      <path fill="#F8FAFC" fillOpacity="1" d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z" />
+    </svg>
+  </div>
+</section>
 
-        {/* GRILLE SECONDAIRE (Plus compacte) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {remainingArticles.map((article, index) => (
-            <motion.article 
-              key={article.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="cursor-pointer flex flex-col bg-white rounded-[2rem] p-4 border border-slate-100 shadow-sm hover:shadow-md transition-all"
-              onClick={() => navigate(`/actualite/article/${article.id}`, { state: { article } })}
-            >
-              <div className="relative h-48 mb-6 overflow-hidden rounded-[1.5rem]">
-                <img src={article.image} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                <div className="absolute top-3 left-3">
-                  <span className="bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter text-slate-900">
-                    {article.category}
-                  </span>
-                </div>
-              </div>
-              
-              <div className="px-2 pb-4 flex flex-col flex-grow">
-                <span className="text-blue-500 text-[10px] font-black uppercase tracking-[0.2em] mb-2">{article.date}</span>
-                <h3 className="text-lg font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors leading-tight">
-                  {article.title}
-                </h3>
-                <p className="text-slate-500 text-xs leading-relaxed mb-6 line-clamp-3">
-                  {article.excerpt}
-                </p>
-                <div className="mt-auto flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-900 group-hover:text-blue-500 transition-colors">
-                  Continuer <ChevronRightIcon className="w-3 h-3 stroke-[3]" />
-                </div>
-              </div>
-            </motion.article>
-          ))}
+      {/* Stats Ticker */}
+      {/* <StatsTicker /> */}
+
+      {/* Contenu principal */}
+      <div id="articles" className="max-w-6xl mx-auto px-6 py-16 md:py-20">
+        {/* Filtres + recherche */}
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-12 pb-4 border-b border-slate-200">
+          <div className="flex flex-wrap gap-2">
+            {CATEGORIES.map(cat => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wide transition-all
+                  ${activeCategory === cat
+                    ? 'bg-slate-800 text-white shadow-sm'
+                    : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:text-slate-800'}`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+          <div className="relative w-full md:w-72">
+            <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Rechercher un article…"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-4 py-2 rounded-full border border-slate-200 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-blue-300 focus:ring-1 focus:ring-blue-200 transition-all bg-white"
+            />
+          </div>
         </div>
+
+        {/* Grille des articles */}
+        {filteredArticles.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {filteredArticles.map((article, i) => (
+              <ArticleCard key={article.id} article={article} onClick={() => goTo(article)} index={i} />
+            ))}
+          </div>
+        ) : (
+          <div className="py-20 text-center">
+            <MagnifyingGlassIcon className="w-10 h-10 text-slate-500 mx-auto mb-3" />
+            <p className="text-slate-400 text-sm">Aucun article ne correspond à votre recherche.</p>
+          </div>
+        )}
       </div>
     </div>
   );

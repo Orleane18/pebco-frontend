@@ -98,7 +98,7 @@ function Header() {
             <span className={`text-[9px] font-bold tracking-[0.3em] transition-colors duration-200 ${
               isTransparent ? "text-blue-300" : "text-blue-600"
             }`}>
-              BETHESDA
+              FINANCE
             </span>
           </div>
         </Link>

@@ -1,18 +1,15 @@
-// src/components/AboutSection.jsx
 import { useState, useEffect, useRef } from 'react';
 
 function AboutSection() {
   const [dynamicText, setDynamicText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
-  const [showCursor, setShowCursor] = useState(true);
   const sectionRef = useRef(null);
   const [hasStarted, setHasStarted] = useState(false);
 
-  const fullDynamic = "accessible et transparent";
-  const typingSpeed = 80;
-  const deletingSpeed = 40;
-  const pauseAfterTyping = 2200;
-  const pauseAfterDeleting = 500;
+  const fullDynamic = "et transparente";
+  const typingSpeed = 60;
+  const deletingSpeed = 30;
+  const pauseAfterTyping = 2000;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -29,453 +26,304 @@ function AboutSection() {
 
   useEffect(() => {
     if (!hasStarted) return;
-
     let timeoutId;
     let intervalId;
 
-    const startTyping = () => {
-      let index = 0;
-      intervalId = setInterval(() => {
-        if (index < fullDynamic.length) {
-          setDynamicText(fullDynamic.substring(0, index + 1));
-          index++;
+    const tick = () => {
+      if (!isDeleting) {
+        if (dynamicText.length < fullDynamic.length) {
+          setDynamicText(fullDynamic.substring(0, dynamicText.length + 1));
         } else {
-          clearInterval(intervalId);
-          setShowCursor(false);
-          timeoutId = setTimeout(() => {
-            setShowCursor(true);
-            setIsDeleting(true);
-          }, pauseAfterTyping);
+          timeoutId = setTimeout(() => setIsDeleting(true), pauseAfterTyping);
         }
-      }, typingSpeed);
+      } else {
+        if (dynamicText.length > 0) {
+          setDynamicText(fullDynamic.substring(0, dynamicText.length - 1));
+        } else {
+          setIsDeleting(false);
+        }
+      }
     };
 
-    const startDeleting = () => {
-      let index = fullDynamic.length;
-      intervalId = setInterval(() => {
-        if (index > 0) {
-          setDynamicText(fullDynamic.substring(0, index - 1));
-          index--;
-        } else {
-          clearInterval(intervalId);
-          timeoutId = setTimeout(() => {
-            setIsDeleting(false);
-          }, pauseAfterDeleting);
-        }
-      }, deletingSpeed);
-    };
-
-    if (!isDeleting) {
-      startTyping();
-    } else {
-      startDeleting();
-    }
-
+    intervalId = setInterval(tick, isDeleting ? deletingSpeed : typingSpeed);
     return () => {
       clearInterval(intervalId);
       clearTimeout(timeoutId);
     };
-  }, [hasStarted, isDeleting]);
+  }, [hasStarted, dynamicText, isDeleting]);
 
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
         .about-section {
-          min-height: 100vh;
-          background: linear-gradient(135deg, #2a4468 0%, #25477e 60%, #2d6ac0 100%);
+          min-height: 85vh;
+          background: radial-gradient(circle at center, #ffffff 0%, #eef4f9 100%);
           display: flex;
           align-items: center;
-          padding: 5rem 2rem;
+          justify-content: center;
+          padding: 4rem 2rem;
           position: relative;
           overflow: hidden;
-          font-family: 'DM Sans', sans-serif;
+          font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
-        .about-bg-grid {
+        /* Pointillés décoratifs légers */
+        .about-section::before {
+          content: "";
           position: absolute;
           inset: 0;
-          background-image:
-            linear-gradient(rgba(245,176,66,0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(245,176,66,0.04) 1px, transparent 1px);
-          background-size: 60px 60px;
+          background-image: radial-gradient(circle, rgba(30, 64, 175, 0.1) 1.5px, transparent 1.5px);
+          background-size: 30px 30px;
+          mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+          opacity: 0.8;
+          z-index: 1;
         }
 
-        .about-bg-circle-1 {
+        /* === DEUX BULLES DIAGONALES (couleurs douces) === */
+       /* Bulle haut-droite (bleu accentué) */
+        .blob-tr {
           position: absolute;
-          width: 500px; height: 500px;
+          top: -55%;
+          right: -5%;
+          width: 450px;
+          height: 450px;
+          background: #60a5fa; /* bleu plus présent */
           border-radius: 50%;
-          background: radial-gradient(circle, rgba(245,176,66,0.06) 0%, transparent 70%);
-          top: -100px; right: -100px;
-          pointer-events: none;
+          z-index: 1;
         }
 
-        .about-bg-circle-2 {
+        /* Bulle bas-gauche (pêche accentué) */
+        .blob-bl {
           position: absolute;
-          width: 300px; height: 300px;
+          bottom: -45%;  /* au lieu de -15% */
+          left: -10%;
+          width: 380px;
+          height: 380px;
+          background: #ee910f; /* cyan/bleu clair */
           border-radius: 50%;
-          background: radial-gradient(circle, rgba(24,95,165,0.15) 0%, transparent 70%);
-          bottom: -50px; left: 100px;
-          pointer-events: none;
+          z-index: 1;
         }
 
         .about-container {
-          max-width: 1100px;
+          max-width: 1000px;
+          width: 100%;
           margin: 0 auto;
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 5rem;
+          grid-template-columns: 1fr 0.9fr;
+          gap: 3rem;
           align-items: center;
-          position: relative;
-          z-index: 1;
+          z-index: 10;
+        }
+
+        @media (max-width: 850px) {
+          .about-container {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+          }
+        }
+
+        .text-content {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: center;
           width: 100%;
         }
 
-        @media (max-width: 900px) {
-          .about-container {
-            grid-template-columns: 1fr;
-            gap: 3rem;
-          }
-          .about-image-side {
-            order: -1;
-          }
-        }
-
-        .about-text-side {
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
-
-        .about-eyebrow {
+        .mission-tag {
           display: inline-flex;
           align-items: center;
-          gap: 10px;
-          width: fit-content;
-        }
-
-        .about-eyebrow-line {
-          width: 32px; height: 1px;
-          background: #F5B042;
-        }
-
-        .about-eyebrow span {
-          font-size: 11px;
-          font-weight: 500;
-          letter-spacing: 0.2em;
+          gap: 8px;
+          color: #1e40af;
+          font-size: 10px;
+          font-weight: 800;
           text-transform: uppercase;
-          color: #F5B042;
+          letter-spacing: 2px;
+          margin-bottom: 1rem;
+        }
+        .mission-line {
+          width: 30px;
+          height: 2px;
+          background: #1e40af;
         }
 
         .about-heading {
-          font-family: 'Playfair Display', serif;
-          font-size: 2.75rem;
+          font-size: clamp(1.7rem, 3.5vw, 2.3rem);
           line-height: 1.15;
-          color: #f0ece4;
-          margin: 0;
+          font-weight: 800;
+          color: #0f172a;
+          margin-bottom: 1rem;
+          min-height: 100px;
         }
 
-        @media (max-width: 600px) {
-          .about-heading { font-size: 2rem; }
+        .line-break {
+          display: block;
+          color: #2563eb;
+          margin-top: 4px;
         }
 
-        .about-dynamic-text {
-          background: linear-gradient(90deg, #F5B042, #FFD966);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-        }
-
-        .about-cursor {
+        .cursor {
           display: inline-block;
-          width: 3px;
-          height: 2.2rem;
-          background: #FFD966;
-          margin-left: 3px;
+          width: 2px;
+          height: 0.85em;
+          background: #2563eb;
+          margin-left: 4px;
+          animation: blink 0.8s infinite;
           vertical-align: middle;
-          animation: aboutBlink 1s step-end infinite;
         }
-
-        @keyframes aboutBlink {
-          0%, 100% { opacity: 1; }
+        @keyframes blink {
           50% { opacity: 0; }
         }
 
         .about-body-text {
-          font-size: 1rem;
-          color: rgba(214, 210, 200, 0.8);
-          line-height: 1.85;
-          font-weight: 300;
-          max-width: 440px;
-          margin: 0;
+          font-size: 0.95rem;
+          line-height: 1.6;
+          color: #334155;
+          margin-bottom: 1.8rem;
+          max-width: 480px;
+          font-weight: 450;
         }
 
-        .about-body-text strong {
-          color: #FFD966;
-          font-weight: 500;
-        }
-
-        .about-stats {
+        .stats-row {
           display: flex;
-          gap: 2rem;
-          padding-top: 1rem;
-          border-top: 1px solid rgba(245,176,66,0.2);
+          gap: 12px;
+          margin-bottom: 1.8rem;
           flex-wrap: wrap;
         }
-
-        .about-stat {
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
-        }
-
-        .about-stat-number {
-          font-family: 'Playfair Display', serif;
-          font-size: 1.8rem;
-          color: #FFD966;
-          line-height: 1;
-        }
-
-        .about-stat-label {
+        .stat-pill {
+          padding: 6px 14px;
+          background: rgba(255, 255, 255, 0.6);
+          border: 1px solid rgba(30, 64, 175, 0.2);
+          backdrop-filter: blur(5px);
+          border-radius: 20px;
           font-size: 11px;
-          color: rgba(214,210,200,0.6);
-          text-transform: uppercase;
-          letter-spacing: 0.1em;
+          color: #1e293b;
+          font-weight: 600;
+          box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+        }
+        .stat-pill b {
+          color: #2563eb;
+          margin-right: 3px;
+          font-weight: 800;
         }
 
-        .about-cta-row {
-          display: flex;
-          align-items: center;
-          gap: 1.5rem;
-          flex-wrap: wrap;
-        }
-
-        .about-cta-btn {
-          display: inline-flex;
-          align-items: center;
-          gap: 10px;
-          padding: 0.75rem 1.75rem;
-          background: linear-gradient(135deg, #F5B042, #FFD966);
-          color: #0a1628;
-          font-family: 'DM Sans', sans-serif;
-          font-size: 0.875rem;
-          font-weight: 500;
-          border: none;
-          border-radius: 2px;
-          cursor: pointer;
-          letter-spacing: 0.05em;
-          transition: opacity 0.2s, transform 0.2s;
+        .btn-modern {
+          background: #1e40af;
+          color: white;
+          padding: 0.75rem 1.5rem;
+          border-radius: 8px;
+          font-weight: 700;
+          font-size: 0.85rem;
           text-decoration: none;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          display: inline-block;
+          box-shadow: 0 6px 10px -3px rgba(30, 64, 175, 0.3);
+        }
+        .btn-modern:hover {
+          transform: translateY(-2px);
+          background: #1d4ed8;
+          box-shadow: 0 12px 18px -5px rgba(30, 64, 175, 0.4);
         }
 
-        .about-cta-btn:hover {
-          opacity: 0.9;
-          transform: translateY(-1px);
-        }
-
-        .about-cta-link {
-          font-size: 0.875rem;
-          color: rgba(214,210,200,0.7);
-          cursor: pointer;
-          text-decoration: none;
-          letter-spacing: 0.03em;
-          border-bottom: 1px solid rgba(245,176,66,0.4);
-          padding-bottom: 1px;
-          transition: color 0.2s;
-          background: none;
-          border-top: none;
-          border-left: none;
-          border-right: none;
-          font-family: 'DM Sans', sans-serif;
-        }
-
-        .about-cta-link:hover { color: #FFD966; }
-
-        .about-image-side {
+        .image-side {
           position: relative;
-          display: flex;
-          justify-content: center;
-          align-items: center;
+          justify-self: center;
+          width: 100%;
         }
 
-        .about-image-frame {
-          position: relative;
-          width: 380px;
-        }
-
-        .about-image-border-accent {
+        .img-decoration {
           position: absolute;
-          top: -16px; left: -16px;
-          width: 100%; height: 100%;
-          border: 2px solid rgba(245,176,66,0.35);
-          border-radius: 2px;
-          z-index: 0;
-        }
-
-        .about-dot-pattern {
-          position: absolute;
-          top: 20px;
-          right: -30px;
-          width: 80px;
-          height: 80px;
-          background-image: radial-gradient(rgba(245,176,66,0.3) 1.5px, transparent 1.5px);
-          background-size: 12px 12px;
-          z-index: 0;
-        }
-
-        .about-image-wrapper {
-          position: relative;
-          width: 380px;
-          height: 460px;
-          background: linear-gradient(135deg, #0d2347 0%, #1a3a6e 100%);
-          border-radius: 2px;
+          inset: -8px;
+          border: 2px solid rgba(37, 99, 235, 0.3);
+          border-radius: 16px;
+          transform: rotate(2deg);
           z-index: 1;
+        }
+
+        .img-main {
+          position: relative;
+          z-index: 2;
+          border-radius: 12px;
           overflow: hidden;
+          aspect-ratio: 16/11;
+          background: #e2e8f0;
+          box-shadow: 0 18px 35px -12px rgba(0, 0, 0, 0.15);
         }
-
-        .about-image-wrapper::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background:
-            radial-gradient(circle at 30% 70%, rgba(245,176,66,0.08) 0%, transparent 50%),
-            radial-gradient(circle at 80% 20%, rgba(24,95,165,0.2) 0%, transparent 50%);
-          z-index: 1;
-        }
-
-        .about-image-wrapper img {
+        .img-main img {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          border-radius: 2px;
-          position: relative;
-          z-index: 2;
-          display: block;
         }
 
-        .about-badge-card {
+        .client-badge {
           position: absolute;
-          bottom: -20px;
-          left: -40px;
-          background: #0a1628;
-          border: 1px solid rgba(245,176,66,0.3);
-          border-radius: 2px;
-          padding: 1rem 1.25rem;
-          z-index: 10;
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          min-width: 200px;
+          top: -16px;
+          right: -16px;
+          background: white;
+          border: 1px solid rgba(226, 232, 240, 1);
+          padding: 8px 14px;
+          border-radius: 12px;
+          z-index: 3;
+          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
         }
-
-        .about-badge-icon {
-          width: 40px; height: 40px;
-          background: rgba(245,176,66,0.12);
-          border-radius: 2px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
-        }
-
-        .about-badge-number {
-          font-family: 'Playfair Display', serif;
-          font-size: 1.2rem;
-          color: #f0ece4;
-          line-height: 1;
+        .client-badge span {
           display: block;
-        }
-
-        .about-badge-desc {
-          font-size: 11px;
-          color: rgba(245,176,66,0.7);
+          font-size: 9px;
+          color: #64748b;
+          font-weight: 600;
           text-transform: uppercase;
-          letter-spacing: 0.1em;
-          display: block;
-          margin-top: 3px;
+        }
+        .client-badge b {
+          color: #1e40af;
+          font-size: 1.1rem;
+          font-weight: 800;
         }
       `}</style>
 
-      <section ref={sectionRef} id="about-section" className="about-section">
-        <div className="about-bg-grid" />
-        <div className="about-bg-circle-1" />
-        <div className="about-bg-circle-2" />
+      <section ref={sectionRef} className="about-section">
+        {/* Deux bulles diagonales */}
+        <div className="blob-tr" />
+        <div className="blob-bl" />
 
         <div className="about-container">
-          {/* Texte */}
-          <div className="about-text-side">
-            <div className="about-eyebrow">
-              <div className="about-eyebrow-line" />
-              <span>Notre mission</span>
+          <div className="text-content">
+            <div className="mission-tag">
+              <div className="mission-line" />
+              NOTRE MISSION
             </div>
 
             <h2 className="about-heading">
-              Rendre le crédit{' '}
-              <span className="about-dynamic-text">{dynamicText}</span>
-              {hasStarted && showCursor && (
-                <span className="about-cursor" />
-              )}
+              <span>Une finance accessible</span>
+              <span className="line-break">
+                {dynamicText}<span className="cursor" />
+              </span>
             </h2>
 
             <p className="about-body-text">
-              Chez <strong>Pebco Finance</strong>, nous croyons que chaque projet mérite d'être
-              financé avec simplicité et équité. Notre objectif est de vous accompagner vers la
-              réalisation de vos ambitions personnelles ou professionnelles, grâce à des solutions
-              de crédit adaptées, rapides et sans paperasse inutile.
+              Pebco Finance facilite vos projets grâce à des solutions de microfinance 
+              adaptées aux réalités du Bénin. Nous brisons les barrières pour votre succès 
+              en vous offrant un accompagnement personnalisé et réactif.
             </p>
 
-            <div className="about-stats">
-              <div className="about-stat">
-                <span className="about-stat-number">+13 555</span>
-                <span className="about-stat-label">Clients financés</span>
-              </div>
-              <div className="about-stat">
-                <span className="about-stat-number">98 %</span>
-                <span className="about-stat-label">Satisfaction</span>
-              </div>
-              <div className="about-stat">
-                <span className="about-stat-number">48 h</span>
-                <span className="about-stat-label">Délai moyen</span>
-              </div>
+            <div className="stats-row">
+              <div className="stat-pill"><b>10+</b> Ans d'expertise</div>
+              <div className="stat-pill"><b>48h</b> Délai max</div>
+              <div className="stat-pill"><b>98%</b> Taux d'accord</div>
             </div>
 
-            <div className="about-cta-row">
-              <a href="offres" className="about-cta-btn">
-                Découvrir nos offres
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </a>
-              <a href="#contact" className="about-cta-link">Nous contacter</a>
-            </div>
+            <a href="#contact" className="btn-modern">Découvrir nos services</a>
           </div>
 
-          {/* Image */}
-          <div className="about-image-side">
-            <div className="about-image-frame">
-              <div className="about-image-border-accent" />
-              <div className="about-dot-pattern" />
-              <div className="about-image-wrapper">
-                <img
-                  src="/images/photo19.jpg"
-                  alt="À propos de Pebco Finance"
-                />
-              </div>
-              <div className="about-badge-card">
-                <div className="about-badge-icon">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="#FFD966" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                    <polyline points="9 12 11 14 15 10" />
-                  </svg>
-                </div>
-                <div>
-                  <span className="about-badge-number">100 % Sécurisé</span>
-                  <span className="about-badge-desc">Données protégées</span>
-                </div>
-              </div>
+          <div className="image-side">
+            <div className="img-decoration" />
+            <div className="client-badge">
+              <span>Partenaires</span>
+              <b>+13.5K</b>
+            </div>
+            <div className="img-main">
+              <img src="/images/photo23.jpg" alt="Équipe Pebco Finance au Bénin" />
             </div>
           </div>
         </div>

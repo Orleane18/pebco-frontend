@@ -1,255 +1,246 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Autoplay, EffectFade } from 'swiper/modules';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
 
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/effect-fade';
+const OriginalArrow = ({
+  width = 100,
+  height = 100,
+  color = "#FFBF00"
+}) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 100 100"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    style={{ display: 'inline-block', verticalAlign: 'middle' }}
+  >
+    {/* Corps principal */}
+    <path
+      d="M30,30 C30,30 20,40 15,50 C10,60 20,70 30,70 C40,70 50,60 45,50 C40,40 30,30 30,30 Z"
+      stroke={color}
+      strokeWidth="4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
 
-const credits = [
-  {
-    id: 'mutuel',
-    title: 'Crédit Mutuel',
-    subtitle: 'La force du collectif',
-    description: 'Propulsez vos micro-activités grâce à la caution solidaire du groupe. Un levier puissant pour le développement communautaire.',
-    extra: 'Ce crédit favorise l’entraide et permet l’accès au financement pour ceux qui ne disposent pas de garanties matérielles classiques.',
-    target: 'Groupements de femmes, artisans et coopératives agricoles.',
-    image: '/images/photo25.jpg',
-  },
-  {
-    id: 'individuel',
-    title: 'Crédit Individuel',
-    subtitle: 'Réalisez vos ambitions',
-    description: 'Une solution flexible pour transformer vos projets personnels en réalité, avec un accompagnement sur mesure.',
-    extra: 'Bénéficiez de taux compétitifs et d’un échéancier adapté à votre capacité de remboursement réelle.',
-    target: 'Salariés, entrepreneurs individuels et porteurs de projets.',
-    image: '/images/photo26.jpg',
-  },
-  {
-    id: 'immobilier',
-    title: 'Crédit Immobilier',
-    subtitle: 'Bâtir votre avenir',
-    description: 'De l’acquisition à la rénovation, nous finançons vos ambitions immobilières avec des conditions compétitives.',
-    extra: 'Un accompagnement expert pour sécuriser votre investissement sur le long terme.',
-    target: 'Particuliers et investisseurs immobiliers.',
-    image: '/images/photo22.jpg',
-  },
-];
+    {/* Extension supérieure */}
+    <path
+      d="M30,30 C35,25 40,20 45,15"
+      stroke={color}
+      strokeWidth="4"
+      strokeLinecap="round"
+    />
 
-const styles = `
-  .credit-slider-section {
-    width: 100%;
-    background: #ffffff;
-    padding: 80px 20px;
-    font-family: 'DM Sans', sans-serif;
-  }
+    {/* Extension inférieure */}
+    <path
+      d="M30,70 C35,75 40,80 45,85"
+      stroke={color}
+      strokeWidth="4"
+      strokeLinecap="round"
+    />
 
-  .section-header {
-    text-align: center;
-    margin-bottom: 50px;
-  }
+    {/* Accentuation */}
+    <path
+      d="M60,40 C65,45 70,50 75,55"
+      stroke={color}
+      strokeWidth="4"
+      strokeLinecap="round"
+    />
 
-  .section-main-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 32px;
-    color: #0f172a;
-    font-weight: 700;
-    position: relative;
-    display: inline-block;
-    padding-bottom: 15px;
-  }
+    {/* Pointe */}
+    <g transform="translate(80, 50) rotate(-15)">
+      <line
+        x1="0"
+        y1="0"
+        x2="20"
+        y2="0"
+        stroke={color}
+        strokeWidth="4"
+        strokeLinecap="round"
+      />
 
-  .section-main-title::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 3px;
-    background: #2563eb;
-  }
+      <path
+        d="M12,-8 L20,0 L12,8"
+        stroke={color}
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
+  </svg>
+);
 
-  .swiper-container-main {
-    max-width: 950px;
-    margin: 0 auto;
-    background: white;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.06);
-    border-radius: 4px;
-    overflow: hidden;
-    border: 1px solid #f1f5f9;
-  }
+export default function CreditSliderHero() {
+  const slides = [
+    {
+      id: 'mutuel',
+      title: (
+        <>
+          Financer ensemble avec <br />
+          notre <span className="text-[#2D4A43]">Crédit Mutuel</span>
+        </>
+      ),
+      desc: "Bénéficiez de la force du collectif. Avec la caution solidaire de votre groupe, accédez à des fonds sécurisés pour propulser vos activités communautaires, agricoles ou entrepreneuriales en toute confiance.",
+      features: [
+        'Caution solidaire du groupe',
+        'Gestion transparente',
+        'Taux communautaires adaptés',
+        'Suivi collectif régulier'
+      ],
+      images: {
+        main: "https://images.unsplash.com/photo-1556742044-3c52d6e88c62?auto=format&fit=crop&w=600&q=80",
+        overlay: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=400&q=80"
+      }
+    },
+    {
+      id: 'individuel',
+      title: (
+        <>
+          Propulsez vos projets via le <br />
+          <span className="text-[#2D4A43]">Crédit Individuel</span>
+        </>
+      ),
+      desc: "Une solution de financement sur mesure conçue exclusivement pour les entrepreneurs et particuliers. Donnez vie à vos ambitions personnelles ou commerciales grâce à des modalités de remboursement flexibles.",
+      features: [
+        'Montants hautement flexibles',
+        'Analyse personnalisée',
+        'Garanties allégées',
+        'Déblocage rapide des fonds'
+      ],
+      images: {
+        main: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=600&q=80",
+        overlay: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=400&q=80"
+      }
+    },
+    {
+      id: 'immobilier',
+      title: (
+        <>
+          Devenez propriétaire avec le <br />
+          <span className="text-[#2D4A43]">Crédit Immobilier</span>
+        </>
+      ),
+      desc: "Construisez ou achetez le bien de vos rêves. Nos solutions de financement immobilier vous offrent des taux hautement compétitifs et des durées étendues pour sécuriser votre patrimoine familial.",
+      features: [
+        'Taux d\'intérêt compétitifs',
+        'Durées de remboursement étendues',
+        'Accompagnement d\'experts',
+        'Financement de construction/achat'
+      ],
+      images: {
+        main: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=600&q=80",
+        overlay: "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?auto=format&fit=crop&w=400&q=80"
+      }
+    }
+  ];
 
-  .credit-slide-content {
-    display: flex;
-    min-height: 450px;
-    align-items: stretch;
-  }
+  const [currentSlide, setCurrentSlide] = useState(0);
 
-  .slide-image-wrapper {
-    flex: 1;
-    position: relative;
-    overflow: hidden;
-  }
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [slides.length]);
 
-  .slide-image-wrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+  const current = slides[currentSlide];
 
-  .blue-tag {
-    position: absolute;
-    top: 0;
-    left: 20px;
-    width: 35px;
-    height: 45px;
-    background: #2563eb;
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%);
-    z-index: 10;
-  }
-
-  .slide-text-wrapper {
-    flex: 1;
-    padding: 45px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background: white;
-  }
-
-  .title-container {
-    border-left: 3px solid #2563eb;
-    padding-left: 15px;
-    margin-bottom: 25px;
-  }
-
-  .main-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 30px;
-    font-weight: 700;
-    color: #0f172a;
-    margin: 0;
-  }
-
-  .sub-title {
-    font-size: 20px;
-    color: #2563eb;
-    font-weight: 600;
-    margin-bottom: 15px;
-  }
-
-  .description-main {
-    font-size: 15px;
-    line-height: 1.6;
-    color: #334155;
-    margin-bottom: 15px;
-  }
-
-  .description-extra {
-    font-size: 14px;
-    line-height: 1.5;
-    color: #64748b;
-    margin-bottom: 25px;
-  }
-
-  .target-box {
-    border-top: 1px solid #f1f5f9;
-    padding-top: 15px;
-    font-size: 13.5px;
-  }
-
-  .target-label {
-    font-weight: 700;
-    color: #0f172a;
-    margin-right: 6px;
-  }
-
-  .swiper-pagination-bullet {
-    width: 8px;
-    height: 8px;
-    background: #94a3b8;
-    opacity: 0.5;
-  }
-
-  .swiper-pagination-bullet-active {
-    background: #2563eb !important;
-    opacity: 1;
-    width: 20px;
-    border-radius: 4px;
-    transition: all 0.3s;
-  }
-
-  @media (max-width: 768px) {
-    .credit-slide-content { flex-direction: column; }
-    .slide-image-wrapper { height: 250px; }
-    .slide-text-wrapper { padding: 30px; }
-  }
-`;
-
-function CreditSlider() {
   return (
     <>
-      <style>{styles}</style>
-      <section className="credit-slider-section">
-        <div className="section-header">
-          <motion.h2 
-            className="section-main-title"
-            initial={{ opacity: 0, y: -20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            Nos solutions de crédits
-          </motion.h2>
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: scale(1.05); }
+          to { opacity: 1; transform: scale(1); }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.8s ease-out forwards;
+        }
+      `}</style>
+
+      <div className="relative max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center bg-[#F4F6F6] p-8 md:p-16 min-h-[700px] select-none">
+        
+        {/* Motif de points décoratif */}
+        <div 
+          className="absolute top-4 left-4 w-32 h-32 opacity-40 hidden md:block transition-all duration-700"
+          style={{
+            backgroundImage: 'radial-gradient(#5a8070 2px, transparent 2px)',
+            backgroundSize: '16px 16px'
+          }}
+        />
+
+        {/* SECTION GAUCHE : Images and the Icon */}
+        <div className="lg:col-span-7 grid grid-cols-12 gap-4 relative">
+          <div className="col-span-8 overflow-hidden rounded-[2rem] shadow-sm z-10 bg-gray-200">
+            <img 
+              key={`main-${currentSlide}`}
+              src={current.images.main} 
+              alt="Crédit visuel" 
+              className="w-full h-[400px] object-cover animate-fadeIn"
+            />
+          </div>
+
+          {/* This is the spot for the new icon, replacing the smallest image */}
+           <div className="col-span-4 self-start mt-4 z-20 flex justify-center items-center animate-fadeIn">
+            <OriginalArrow
+              width={90}
+              height={90}
+              color="#E6A817"
+            />
+          </div>
+
+
+          <div className="col-start-5 col-span-6 -mt-32 overflow-hidden rounded-[2rem] shadow-md z-20 border-4 border-[#F4F6F6] bg-gray-200">
+            <img 
+              key={`overlay-${currentSlide}`}
+              src={current.images.overlay} 
+              alt="Focus crédit" 
+              className="w-full h-[300px] object-cover animate-fadeIn"
+            />
+          </div>
         </div>
 
-        <div className="swiper-container-main">
-          <Swiper
-            modules={[Pagination, Autoplay, EffectFade]}
-            effect="fade"
-            pagination={{ clickable: true }}
-            autoplay={{ delay: 5000, disableOnInteraction: false }}
-            loop={true}
-          >
-            {credits.map((credit) => (
-              <SwiperSlide key={credit.id}>
-                <div className="credit-slide-content">
-                  <div className="slide-image-wrapper">
-                    <div className="blue-tag"></div>
-                    <img src={credit.image} alt={credit.title} />
-                  </div>
+        {/* SECTION DROITE : Textes */}
+        <div className="lg:col-span-5 space-y-6 px-4 lg:px-0 flex flex-col justify-center">
+          
+          <h1 key={`title-${currentSlide}`} className="text-4xl lg:text-5xl font-bold text-[#1E2322] leading-tight font-serif animate-fadeIn">
+            {current.title}
+          </h1>
+          
+          <p key={`desc-${currentSlide}`} className="text-gray-500 leading-relaxed text-[15px] min-h-[100px] animate-fadeIn">
+            {current.desc}
+          </p>
 
-                  <div className="slide-text-wrapper">
-                    <motion.div
-                      initial={{ opacity: 0, x: 20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.6 }}
-                    >
-                      <div className="title-container">
-                        <h2 className="main-title">{credit.title}</h2>
-                      </div>
-                      <h3 className="sub-title">{credit.subtitle}</h3>
-                      <p className="description-main">{credit.description}</p>
-                      <p className="description-extra">{credit.extra}</p>
-                      <div className="target-box">
-                        <p>
-                          <span className="target-label">Cible :</span>
-                          {credit.target}
-                        </p>
-                      </div>
-                    </motion.div>
-                  </div>
-                </div>
-              </SwiperSlide>
+          <div key={`features-${currentSlide}`} className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-4 pt-2 animate-fadeIn">
+            {current.features.map((feature, index) => (
+              <div key={index} className="flex items-start space-x-2">
+                <span className="inline-block w-2 h-2 rounded-full border-2 border-[#2D4A43] mt-2 flex-shrink-0" />
+                <span className="text-sm text-gray-600 font-medium leading-tight">
+                  {feature}
+                </span>
+              </div>
             ))}
-          </Swiper>
+          </div>
+
+          <div className="pt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+            <button className="bg-[#2A2A2A] hover:bg-[#1E1E1E] text-white font-semibold px-8 py-3.5 rounded-full transition duration-300 ease-in-out shadow-sm text-sm whitespace-nowrap">
+              Découvrir l'offre
+            </button>
+
+            <div className="flex space-x-2.5 items-center">
+              {slides.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`h-2.5 rounded-full transition-all duration-300 ${
+                    index === currentSlide 
+                      ? 'w-7 bg-[#2D4A43]' 
+                      : 'w-2.5 bg-gray-300 hover:bg-gray-400'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
         </div>
-      </section>
+      </div>
     </>
   );
 }
-
-export default CreditSlider;
